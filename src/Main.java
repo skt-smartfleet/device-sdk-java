@@ -24,7 +24,7 @@ public class Main {
             @Override
             /**
              * RPC 메세지 수신
-             * Response응답은 SDK 에서 처리되고 아래 함수내에서 요청을 조건 구현후 조건에 맞는 Result 함수를호출하도록한다.
+             * Response응답은 SDK 에서 자동으로 처리되고 아래 함수내에서 method조건을 구현후 Result 함수를호출하도록한다.
              */
             public void onRPCMessageArrived(String topic, String request_id, String method, MqttMessage mqttMessage) {
                 if (method.equals(DEVICE_ACTIVATION)) {
