@@ -8,7 +8,7 @@ public class Main {
     private static final Logger logger = Logger.getLogger(Main.class);
 
     public static void main(String[] args) {
-	    MqttWrapper mqtt = MqttWrapper.getInstance();
+        MqttWrapper mqtt = MqttWrapper.getInstance();
 	    // MQTT메세지 응답 리스너
         mqtt.setListener(new MqttWrapper.MqttWrapperListener() {
             @Override

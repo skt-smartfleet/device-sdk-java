@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ed977aeb-21ca-4d26-9d40-16b1d0077f4a" name="Default" comment="" />
+    <list default="true" id="ed977aeb-21ca-4d26-9d40-16b1d0077f4a" name="Default" comment="...">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/net/MqttWrapper.java" afterPath="$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/net/MqttWrapper.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/util/BypassSSLContextFactory.java" afterPath="$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/util/BypassSSLContextFactory.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Main.java" afterPath="$PROJECT_DIR$/src/Main.java" />
+    </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -15,11 +20,74 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="24" column="59" lean-forward="true" selection-start-line="24" selection-start-column="59" selection-end-line="24" selection-end-column="59" />
+            <state relative-caret-position="259">
+              <caret line="52" column="29" lean-forward="true" selection-start-line="52" selection-start-column="29" selection-end-line="52" selection-end-column="29" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MqttWrapper.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/net/MqttWrapper.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="484">
+              <caret line="262" column="70" lean-forward="false" selection-start-line="262" selection-start-column="70" selection-end-line="262" selection-end-column="70" />
+              <folding>
+                <element signature="e#4527#4528#0" expanded="true" />
+                <element signature="e#4565#4566#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BypassSSLContextFactory.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/util/BypassSSLContextFactory.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="207">
+              <caret line="25" column="0" lean-forward="true" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="140">
+              <caret line="813" column="0" lean-forward="true" selection-start-line="813" selection-start-column="0" selection-end-line="813" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CODES.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/define/CODES.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="223">
+              <caret line="21" column="31" lean-forward="false" selection-start-line="21" selection-start-column="31" selection-end-line="21" selection-end-column="31" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RPCType.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/net/RPCType.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="144">
+              <caret line="8" column="12" lean-forward="false" selection-start-line="8" selection-start-column="12" selection-end-line="8" selection-end-column="12" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TripType.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/net/TripType.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="144">
+              <caret line="8" column="12" lean-forward="false" selection-start-line="8" selection-start-column="12" selection-end-line="8" selection-end-column="12" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -35,11 +103,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>.v</find>
-      <find>dcl</find>
-      <find>dCl</find>
-      <find>handler</find>
-      <find>getInstance</find>
       <find>actionl</find>
       <find>imqtt</find>
       <find>console</find>
@@ -57,7 +120,6 @@
       <find>messagea</find>
       <find>rpcReqId</find>
       <find>rpcmessagea</find>
-      <find>onRPCMessageArrived</find>
       <find>case</find>
       <find>equ</find>
       <find>RESULT_DeviceActivation</find>
@@ -65,6 +127,12 @@
       <find>resultOBDReset</find>
       <find>resultDeviceSerialNumberCheck</find>
       <find>mListener</find>
+      <find>onRPCMessageArrived</find>
+      <find>eviceActivation</find>
+      <find>By</find>
+      <find>...</find>
+      <find>serverHost</find>
+      <find>ssl</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -88,18 +156,20 @@
         <option value="$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/obj/RPCMessageResponse.java" />
         <option value="$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/obj/TripMessage.java" />
         <option value="$PROJECT_DIR$/sdk/src/keystore.jks" />
-        <option value="$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/util/BypassSSLContextFactory.java" />
         <option value="$PROJECT_DIR$/sdk/src/log4j.properties" />
         <option value="$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/obj/payload/MicroTrip.java" />
-        <option value="$PROJECT_DIR$/src/Main.java" />
-        <option value="$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/net/MqttWrapper.java" />
         <option value="$PROJECT_DIR$/.idea/workspace.xml" />
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/net/MqttWrapper.java" />
+        <option value="$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/util/BypassSSLContextFactory.java" />
+        <option value="$PROJECT_DIR$/src/Main.java" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="30" />
     <option name="y" value="23" />
-    <option name="width" value="1407" />
+    <option name="width" value="1410" />
     <option name="height" value="877" />
   </component>
   <component name="ProjectView">
@@ -125,6 +195,66 @@
             <path>
               <item name="device-sdk-java" type="b2602c69:ProjectViewProjectNode" />
               <item name="device-sdk-java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="device-sdk-java" type="b2602c69:ProjectViewProjectNode" />
+              <item name="device-sdk-java" type="462c0819:PsiDirectoryNode" />
+              <item name="sdk" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="device-sdk-java" type="b2602c69:ProjectViewProjectNode" />
+              <item name="device-sdk-java" type="462c0819:PsiDirectoryNode" />
+              <item name="sdk" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="device-sdk-java" type="b2602c69:ProjectViewProjectNode" />
+              <item name="device-sdk-java" type="462c0819:PsiDirectoryNode" />
+              <item name="sdk" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="sdk" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="device-sdk-java" type="b2602c69:ProjectViewProjectNode" />
+              <item name="device-sdk-java" type="462c0819:PsiDirectoryNode" />
+              <item name="sdk" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="sdk" type="462c0819:PsiDirectoryNode" />
+              <item name="net" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="device-sdk-java" type="b2602c69:ProjectViewProjectNode" />
+              <item name="device-sdk-java" type="462c0819:PsiDirectoryNode" />
+              <item name="sdk" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="sdk" type="462c0819:PsiDirectoryNode" />
+              <item name="obj" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="device-sdk-java" type="b2602c69:ProjectViewProjectNode" />
+              <item name="device-sdk-java" type="462c0819:PsiDirectoryNode" />
+              <item name="sdk" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="sdk" type="462c0819:PsiDirectoryNode" />
+              <item name="obj" type="462c0819:PsiDirectoryNode" />
+              <item name="request" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="device-sdk-java" type="b2602c69:ProjectViewProjectNode" />
+              <item name="device-sdk-java" type="462c0819:PsiDirectoryNode" />
+              <item name="sdk" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="sdk" type="462c0819:PsiDirectoryNode" />
+              <item name="obj" type="462c0819:PsiDirectoryNode" />
+              <item name="result" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="device-sdk-java" type="b2602c69:ProjectViewProjectNode" />
+              <item name="device-sdk-java" type="462c0819:PsiDirectoryNode" />
+              <item name="sdk" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="sdk" type="462c0819:PsiDirectoryNode" />
+              <item name="util" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="device-sdk-java" type="b2602c69:ProjectViewProjectNode" />
@@ -229,11 +359,39 @@
       <option name="project" value="LOCAL" />
       <updated>1512355104497</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="주석">
+      <created>1512366048445</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1512366048445</updated>
+    </task>
+    <task id="LOCAL-00004" summary="주석">
+      <created>1512366139791</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1512366139791</updated>
+    </task>
+    <task id="LOCAL-00005" summary="주석">
+      <created>1512371466442</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1512371466442</updated>
+    </task>
+    <task id="LOCAL-00006" summary="...">
+      <created>1512371613272</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1512371613272</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1407" height="877" extended-state="0" />
+    <frame x="30" y="23" width="1410" height="877" extended-state="6" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -243,12 +401,12 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16496164" sideWeight="0.50256413" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16496164" sideWeight="0.4974359" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32992327" sideWeight="0.4930403" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3056266" sideWeight="0.4974359" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32992327" sideWeight="0.4930403" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32992327" sideWeight="0.49707603" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17142858" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21491228" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -294,29 +452,16 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
-    <MESSAGE value="..." />
     <MESSAGE value="init" />
-    <option name="LAST_COMMIT_MESSAGE" value="init" />
+    <MESSAGE value="주석" />
+    <MESSAGE value="..." />
+    <option name="LAST_COMMIT_MESSAGE" value="..." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/obj/RPCMessageResponse.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/net/MqttWrapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="10134">
-          <caret line="563" column="7" lean-forward="true" selection-start-line="563" selection-start-column="7" selection-end-line="563" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/define/CONFIGS.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
@@ -425,20 +570,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/net/TripType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="8" column="12" lean-forward="false" selection-start-line="8" selection-start-column="12" selection-end-line="8" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/obj/RPCMessageRequest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="18" column="5" lean-forward="false" selection-start-line="17" selection-start-column="4" selection-end-line="18" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/src.zip!/java/lang/Object.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="522">
@@ -478,27 +609,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="126">
           <caret line="10" column="0" lean-forward="true" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/util/LogWrapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/define/CONFIGS.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="17" column="28" lean-forward="false" selection-start-line="17" selection-start-column="28" selection-end-line="17" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/util/BypassSSLContextFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -551,55 +661,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/net/RPCType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/obj/result/DeviceActivation.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="14" column="27" lean-forward="false" selection-start-line="14" selection-start-column="20" selection-end-line="14" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/obj/RPCMessageResponse.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/obj/result/DeviceSerialNumberCheck.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="14" column="56" lean-forward="false" selection-start-line="14" selection-start-column="18" selection-end-line="14" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/obj/RPCMessageResult.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="388">
-          <caret line="33" column="29" lean-forward="false" selection-start-line="33" selection-start-column="22" selection-end-line="33" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/define/CODES.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="16" column="31" lean-forward="false" selection-start-line="16" selection-start-column="31" selection-end-line="16" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/net/MqttWrapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15786">
-          <caret line="919" column="77" lean-forward="false" selection-start-line="919" selection-start-column="77" selection-end-line="919" selection-end-column="77" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.idea/description.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -630,14 +691,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/sdk/src/log4j.properties">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
@@ -652,10 +705,179 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/util/LogWrapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="16" column="14" lean-forward="true" selection-start-line="16" selection-start-column="14" selection-end-line="16" selection-end-column="14" />
+          <folding>
+            <marker date="1512440254000" expanded="true" signature="52484:52501" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="52484:52519" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="52484:52532" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="52484:52547" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="52582:54824" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="52595:54809" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="52649:52944" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="52668:52929" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="52731:52909" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="52771:52875" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="52792:52853" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="52994:53321" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="53013:53306" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="53108:53286" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="53148:53252" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="53169:53230" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="53372:53691" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="53391:53676" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="53478:53656" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="53518:53622" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="53539:53600" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="53734:54040" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="53753:54025" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="53827:54005" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="53867:53971" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="53888:53949" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="54091:54409" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="54110:54394" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="54196:54374" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="54236:54340" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="54257:54318" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="54461:54795" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="54480:54780" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="54582:54760" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="54622:54726" ph="..." />
+            <marker date="1512440254000" expanded="true" signature="54643:54704" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/define/CODES.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="223">
+          <caret line="21" column="31" lean-forward="false" selection-start-line="21" selection-start-column="31" selection-end-line="21" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/net/RPCType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="8" column="12" lean-forward="false" selection-start-line="8" selection-start-column="12" selection-end-line="8" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/obj/RPCMessageResult.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="355">
+          <caret line="43" column="0" lean-forward="true" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/obj/RPCMessageResponse.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="11" column="13" lean-forward="false" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/obj/RPCMessageRequest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1409">
+          <caret line="103" column="29" lean-forward="true" selection-start-line="103" selection-start-column="29" selection-end-line="103" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/obj/result/DeviceSerialNumberCheck.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="414">
+          <caret line="25" column="5" lean-forward="true" selection-start-line="25" selection-start-column="5" selection-end-line="25" selection-end-column="5" />
+          <folding>
+            <element signature="e#265#266#0" expanded="false" />
+            <element signature="e#329#330#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/obj/result/DeviceActivation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="14" column="27" lean-forward="false" selection-start-line="14" selection-start-column="20" selection-end-line="14" selection-end-column="27" />
+          <folding>
+            <element signature="e#248#249#0" expanded="false" />
+            <element signature="e#284#285#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/net/TripType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="8" column="12" lean-forward="false" selection-start-line="8" selection-start-column="12" selection-end-line="8" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="813" column="0" lean-forward="true" selection-start-line="813" selection-start-column="0" selection-end-line="813" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/define/CONFIGS.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="2" column="12" lean-forward="false" selection-start-line="2" selection-start-column="12" selection-end-line="2" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/jre/lib/rt.jar!/javax/net/ssl/SSLContext.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="167">
+          <caret line="75" column="34" lean-forward="false" selection-start-line="75" selection-start-column="34" selection-end-line="75" selection-end-column="34" />
+          <folding>
+            <element signature="e#2653#2654#0" expanded="true" />
+            <element signature="e#2716#2717#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/net/MqttWrapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="484">
+          <caret line="262" column="70" lean-forward="false" selection-start-line="262" selection-start-column="70" selection-end-line="262" selection-end-column="70" />
+          <folding>
+            <element signature="e#4527#4528#0" expanded="true" />
+            <element signature="e#4565#4566#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sdk/src/com/sktelecom/smartfleet/sdk/util/BypassSSLContextFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="25" column="0" lean-forward="true" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="24" column="59" lean-forward="true" selection-start-line="24" selection-start-column="59" selection-end-line="24" selection-end-column="59" />
+        <state relative-caret-position="259">
+          <caret line="52" column="29" lean-forward="true" selection-start-line="52" selection-start-column="29" selection-end-line="52" selection-end-column="29" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

@@ -20,28 +20,28 @@ public class BypassSSLContextFactory {
     static final String KEY_MANAGER_FACTORY_ALGORITHM = KeyManagerFactory.getDefaultAlgorithm();
 
     /**
-     * keytool -genkey -alias iot -keysize 512 -validity 3650 -keyalg RSA -dname "CN=iot.cht.com.tw, OU=TL, O=CHT" -keypass chtiot -storepass chtiot -keystore keystore.jks
+     * keytool -genkey -alias iot -keysize 512 -validity 3650 -keyalg RSA -dname "CN=iot.domain.com, OU=TL, O=CHT" -keypass chtiot -storepass chtiot -keystore keystore.jks
      *
      */
 
-    static final String KEYSTORE = "keystore.jks";
-    static final char[] KEYSTORE_KEY = "bd6t4f54a".toCharArray();
+//    static final String KEYSTORE = "keystore.jks";
+//    static final char[] KEYSTORE_KEY = "bd6t4f54a".toCharArray();
 
     public BypassSSLContextFactory() {
     }
 
-    public static final SSLContext createServerSSLContext() throws GeneralSecurityException, IOException {
-        KeyStore ks = KeyStore.getInstance("JKS");
-        ks.load(BypassSSLContextFactory.class.getResourceAsStream(KEYSTORE), KEYSTORE_KEY);
-
-        KeyManagerFactory kmf = KeyManagerFactory.getInstance(KEY_MANAGER_FACTORY_ALGORITHM);
-        kmf.init(ks, KEYSTORE_KEY);
-
-        SSLContext ssl = SSLContext.getInstance(PROTOCOL);
-        ssl.init(kmf.getKeyManagers(), new BypassTrustManagerFactory().getTrustManagers(), null);
-
-        return ssl;
-    }
+//    public static final SSLContext createServerSSLContext() throws GeneralSecurityException, IOException {
+//        KeyStore ks = KeyStore.getInstance("JKS");
+//        ks.load(BypassSSLContextFactory.class.getResourceAsStream(KEYSTORE), KEYSTORE_KEY);
+//
+//        KeyManagerFactory kmf = KeyManagerFactory.getInstance(KEY_MANAGER_FACTORY_ALGORITHM);
+//        kmf.init(ks, KEYSTORE_KEY);
+//
+//        SSLContext ssl = SSLContext.getInstance(PROTOCOL);
+//        ssl.init(kmf.getKeyManagers(), new BypassTrustManagerFactory().getTrustManagers(), null);
+//
+//        return ssl;
+//    }
 
     public static final SSLContext createClientSSLContext()	throws GeneralSecurityException {
         SSLContext ssl = SSLContext.getInstance(PROTOCOL);

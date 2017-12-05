@@ -514,7 +514,7 @@ public class MqttWrapper implements IMqttActionListener, MqttCallback, MqttCallb
                 message.clearPayload();
             }
         } catch (JSONException e) {
-            logger.info("Unexpected JSON exception in MessageArrived");
+//            logger.info("Unexpected JSON exception in MessageArrived");
         }
     }
 
