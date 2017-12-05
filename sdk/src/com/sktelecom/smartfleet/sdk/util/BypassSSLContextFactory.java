@@ -25,7 +25,7 @@ public class BypassSSLContextFactory {
      */
 
 //    static final String KEYSTORE = "keystore.jks";
-//    static final char[] KEYSTORE_KEY = "bd6t4f54a".toCharArray();
+//    static final char[] KEYSTORE_KEY = "a".toCharArray();
 
     public BypassSSLContextFactory() {
     }
