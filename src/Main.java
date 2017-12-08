@@ -1,4 +1,4 @@
-import com.sktelecom.smartfleet.sdk.net.MqttWrapper;
+import com.sktelecom.smartfleet.sdk.net.SFMqttWrapper;
 import org.apache.log4j.Logger;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
@@ -8,9 +8,9 @@ public class Main {
     private static final Logger logger = Logger.getLogger(Main.class);
 
     public static void main(String[] args) {
-        MqttWrapper mqtt = MqttWrapper.getInstance();
+        SFMqttWrapper mqtt = SFMqttWrapper.getInstance();
 	    // MQTT메세지 응답 리스너
-        mqtt.setListener(new MqttWrapper.MqttWrapperListener() {
+        mqtt.setListener(new SFMqttWrapper.MqttWrapperListener() {
             @Override
             public void onMqttConnected() {
                 logger.info("mqtt connected..");
@@ -27,22 +27,22 @@ public class Main {
              * Response응답은 SDK 에서 자동으로 처리되고 아래 함수내에서 method조건을 구현후 Result 함수를호출하도록한다.
              */
             public void onRPCMessageArrived(String topic, String request_id, String method, MqttMessage mqttMessage) {
-                if (method.equals(DEVICE_ACTIVATION)) {
+                if (method.equals(DEVICE_ACTIVATION_STR)) {
                     // 단말이 Activation이 필요한 경우에 Activation Flow에 따라 정상적으로 접속이 되는지 확인
                     mqtt.resultDeviceActivation("00가0000",topic);
-                } else if (method.equals(FIRMWARE_UPDATE)) {
+                } else if (method.equals(FIRMWARE_UPDATE_CHUNK_STR)) {
                     // F/W Update에 대한 원격 요청을 정상적으로 수행하는지 확인
                     mqtt.resultFirmwareUpdate(topic);
-                } else if (method.equals(OBD_RESET)) {
+                } else if (method.equals(OBD_RESET_STR)) {
                     // 단말 리셋을 정상적으로 수행하는지 확인
                     mqtt.resultOBDReset(topic);
-                } else if (method.equals(DEVICE_SERIAL_NUMBER_CHECK)) {
+                } else if (method.equals(DEVICE_SERIAL_NUMBER_CHECK_STR)) {
                     // 단말 시리얼키 검사
                     mqtt.resultDeviceSerialNumberCheck("70d71b00-71c9-11e7-b3e0-e5673983c7b9",topic);
-                } else if (method.equals(CLEAR_DEVICE_DATA)) {
+                } else if (method.equals(CLEAR_DEVICE_DATA_STR)) {
                     // 단말 데이터초기화
                     mqtt.resultClearDeviceData(topic);
-                } else if (method.equals(FIRMWARE_UPDATE_CHUNK)) {
+                } else if (method.equals(FIRMWARE_UPDATE_CHUNK_STR)) {
                     // Firmware Update Chunk 이벤트
                     mqtt.resultFirmwareUpdateChunk(topic);
                 }
@@ -52,8 +52,9 @@ public class Main {
         mqtt.setHost("localhost");
         mqtt.setPort("8443");
         // 사용자 인증키(20자리)
-        mqtt.setToken("00000000000000000001");
+        mqtt.setUserName("00000000000000000001");
+        mqtt.initialize();;
         // MQTT서버연결(ssl)
-        mqtt.TRE_Connect();
+
     }
 }

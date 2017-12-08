@@ -23,6 +23,7 @@ public class CONFIGS {
     public static String MQTT_SERVER_HOST;
     public static String MQTT_SERVER_PORT;
     public static String MQTT_USER_NAME;
+    public static String MQTT_PASSWORD;
 
     static {
 

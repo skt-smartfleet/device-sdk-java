@@ -22,29 +22,25 @@ import com.sktelecom.smartfleet.sdk.util.BypassSSLContextFactory;
 import org.apache.log4j.Logger;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.eclipse.paho.client.mqttv3.util.Strings;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManagerFactory;
-import java.io.IOException;
 import java.security.*;
-import java.security.cert.CertificateException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static com.sktelecom.smartfleet.sdk.define.CODES.CLEAR_DEVICE_DATA;
-import static com.sktelecom.smartfleet.sdk.define.CODES.DEVICE_ACTIVATION;
-import static com.sktelecom.smartfleet.sdk.define.CODES.DEVICE_SERIAL_NUMBER_CHECK;
-import static com.sktelecom.smartfleet.sdk.define.CODES.FIRMWARE_UPDATE;
-import static com.sktelecom.smartfleet.sdk.define.CODES.FIRMWARE_UPDATE_CHUNK;
-import static com.sktelecom.smartfleet.sdk.define.CODES.OBD_RESET;
+import static com.sktelecom.smartfleet.sdk.define.CODES.CLEAR_DEVICE_DATA_STR;
+import static com.sktelecom.smartfleet.sdk.define.CODES.DEVICE_ACTIVATION_STR;
+import static com.sktelecom.smartfleet.sdk.define.CODES.DEVICE_SERIAL_NUMBER_CHECK_STR;
+import static com.sktelecom.smartfleet.sdk.define.CODES.FIRMWARE_UPDATE_CHUNK_STR;
+import static com.sktelecom.smartfleet.sdk.define.CODES.FIRMWARE_UPDATE_STR;
+import static com.sktelecom.smartfleet.sdk.define.CODES.OBD_RESET_STR;
 import static com.sktelecom.smartfleet.sdk.define.CODES.PUBLISH_TOPIC_ATTRIBUTES;
 import static com.sktelecom.smartfleet.sdk.define.CODES.PUBLISH_TOPIC_TELEMETRY;
 import static com.sktelecom.smartfleet.sdk.define.CODES.PUBLISH_TOPIC_TRE;
 import static com.sktelecom.smartfleet.sdk.define.CODES.RPC_REQUEST_TOPIC;
 import static com.sktelecom.smartfleet.sdk.define.CODES.SUBSCRIBE_TOPIC;
-
 /**
  * MQTT 프로토콜 Wrapper class
  *
@@ -53,9 +49,10 @@ import static com.sktelecom.smartfleet.sdk.define.CODES.SUBSCRIBE_TOPIC;
  * @see org.eclipse.paho.client.mqttv3.MqttClient
  * @see org.eclipse.paho.client.mqttv3
  */
-public class MqttWrapper implements IMqttActionListener, MqttCallback, MqttCallbackExtended {
+public class SFMqttWrapper implements IMqttActionListener, MqttCallback, MqttCallbackExtended {
 
-    private final Logger logger = Logger.getLogger(MqttWrapper.class);
+    private final Logger logger = Logger.getLogger(SFMqttWrapper.class);
+
     /**
      * 1차 10초 마다 재시도 횟수
      * 2차 10분 당 조정 후 재시도 횟수
@@ -68,7 +65,7 @@ public class MqttWrapper implements IMqttActionListener, MqttCallback, MqttCallb
     private final static int RETRY_INTERVAL_1 = 1000 * 10;
     private final static int RETRY_INTERVAL_2 = 1000 * 60 * 10 ;
 
-    private static MqttWrapper mqttWrapper = null;
+    private static SFMqttWrapper SFMqttWrapper = null;
 
     private MqttClient mqttClient;
     private String clientId;
@@ -86,53 +83,68 @@ public class MqttWrapper implements IMqttActionListener, MqttCallback, MqttCallb
     }
 
     private TripMessage tripMessage = new TripMessage();
-    private RPCMessageRequest rpcMessageRequest = new RPCMessageRequest();
     private RPCMessageResponse rpcMessageResponse = new RPCMessageResponse();
     private RPCMessageResult rpcMessageResult = new RPCMessageResult();
 
     public String serverHost = CONFIGS.MQTT_SERVER_HOST;
     public String serverPort = CONFIGS.MQTT_SERVER_PORT;
     public String userName = CONFIGS.MQTT_USER_NAME;
-    //    public String passWord = CONFIGS.MQTT_USER_PASSWORD;
-//    public String topic = CONFIGS.MQTT_TOPIC;
+    public String password = CONFIGS.MQTT_PASSWORD;
+
     final private int qos = CONFIGS.qos;
     final private int microTripQos = CONFIGS.microTripQos;
 
     private MqttConnectOptions conOpt;
 
-    public static MqttWrapper getInstance() {
-        if (mqttWrapper == null) {
-            mqttWrapper = new MqttWrapper();
+    public static SFMqttWrapper getInstance() {
+        if (SFMqttWrapper == null) {
+            SFMqttWrapper = new SFMqttWrapper();
         }
 
-        return mqttWrapper;
+        return SFMqttWrapper;
     }
 
-    private MqttWrapper() {
+    private SFMqttWrapper() {
 
     }
 
+    /**
+     * 서버호스트 정보를 설정한다.
+     * @param host
+     */
     public void setHost(String host) {
         this.serverHost = host;
     }
 
+    /**
+     * 서버 포트 정보를 설정한다.
+     * @param port
+     */
     public void setPort(String port) {
         this.serverPort = port;
     }
 
-    public void setToken(String token) {
-        this.userName = token;
+    /**
+     * 서버 유저네임을 설정한다.
+     * @param userName
+     */
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
+    /**
+     * 서버 비밀번호를 설정한다. (미사용)
+     * @return
+     */
     public boolean isMqttConnectStatus() {
 
         boolean isConnected;
 
-        MqttWrapper.MqttConnectionStatus status = mqttWrapper.getClientStatus();
+        SFMqttWrapper.MqttConnectionStatus status = SFMqttWrapper.getClientStatus();
 
-        if (status == MqttWrapper.MqttConnectionStatus.DISCONNECTED ||
-                status == MqttWrapper.MqttConnectionStatus.NONE ||
-                status == MqttWrapper.MqttConnectionStatus.ERROR) {
+        if (status == MqttConnectionStatus.DISCONNECTED ||
+                status == MqttConnectionStatus.NONE ||
+                status == MqttConnectionStatus.ERROR) {
             isConnected = false;
         } else {
             isConnected = true;
@@ -141,60 +153,122 @@ public class MqttWrapper implements IMqttActionListener, MqttCallback, MqttCallb
     }
 
     public void initialize() {
-//        this.mContext = context.getApplicationContext();
         initializer();
     }
 
-    private void initializer() {
+    /**
+     * 지정된 서버 정보로 TRE 플랫폼에 MQTT 프로토콜로 접속한다.
+     *
+     * @return N/A
+     */
+    public void mqttConnect() {
+        initialize();
+    }
 
-        MqttWrapper.MqttConnectionStatus status = mqttWrapper.getClientStatus();
-        attempts = 0;
+    /**
+     * 파라미터로 넘겨진 서버 정보로 TRE 플랫폼에 MQTT 프로토콜로 접속한다.
+     * @param serverHost
+     * @param serverPort
+     * @param userName
+     * @param password
+     */
+    public void mqttConnect(String serverHost, String serverPort, String userName, String password) {
 
-        if (status == MqttWrapper.MqttConnectionStatus.DISCONNECTED ||
-                status == MqttWrapper.MqttConnectionStatus.NONE ||
-                status == MqttWrapper.MqttConnectionStatus.ERROR) {
-            mqttWrapper.connect(serverHost, serverPort, userName);
-        } else {
-            mqttWrapper.disconnect();
-            mqttWrapper.connect(serverHost, serverPort, userName);
+        this.serverHost = serverHost;
+        this.serverPort = serverPort;
+        this.userName = userName;
+        this.password = password;
+
+        initialize();
+
+    }
+
+    /**
+     * MQTT Broker 연결 해제
+     *
+     * @return N/A
+     */
+    public void mqttDisconnect() {
+        disconnect();
+    }
+
+    /**
+     * 지정된 Topic 정보로 MQTT subscribe 구독한다
+     *
+     * @return N/A
+     */
+    public void subscribeTopic() {
+        subscribe(SUBSCRIBE_TOPIC, qos);
+    }
+
+    /**
+     * 파라미터로 넘겨진 Topic 정보로 MQTT subscribe 구독한다*
+     * @param topic
+     */
+    public void subscribeTopic(String topic) {
+        subscribe(topic, qos);
+    }
+
+    /**
+     * 파라미터로 넘겨진 Topic, qos 정보로 MQTT subscribe 구독한다
+     * @param topic
+     * @param qos
+     */
+    public void subscribeTopic(String topic, int qos) {
+
+        logger.info("[Publish] onSuccess");
+        if(Strings.isEmpty(topic)){
+            logger.info("topic is empty");
+            return;
+        }
+        if(qos<0 || qos > 2){
+            logger.info("qos is invalid");
+            return;
         }
 
+        subscribe(topic, qos);
     }
 
-    public void subscribeLinkId() {
-        subscribeTopic(SUBSCRIBE_TOPIC, qos);
-    }
-
-    public void subscribeLinkId(String linkId) {
-        subscribeTopic(linkId, qos);
-    }
-
-    private void unsubscribe(String linkId) {
-        unsubscribeTopic(linkId);
-    }
-
-
-    @Override
-    protected void finalize() throws Throwable {
-
-        try {
-            if (mqttClient != null) {
-//                mqttClient.unregisterResources();
-            }
-        } finally {
-            super.finalize();
-        }
-    }
-
-    private MqttConnectionStatus getClientStatus() {
-        return mMqttClientStatus;
+    /**
+     * 파라미터로 넘겨진 Topic 정보로 MQTT subscribe 구독을 해지한다
+     * @param topic
+     */
+    public void unsubscribeTopic(String topic) {
+        unsubscribe(topic);
     }
 
     /**
      * 데모앱을 위한 콜백 리스너
+     * onMqttConnected(), onMqttDisconnected(), onMessageArrived(), onRPCMessageArrived()
      */
     public void setListener(MqttWrapperListener listener) {
         mListener = listener;
+    }
+
+    /**
+     * MQTT Broker 로 접속을 위한 초기화 작업을 진행한다.
+     */
+    private void initializer() {
+
+        SFMqttWrapper.MqttConnectionStatus status = SFMqttWrapper.getClientStatus();
+        attempts = 0;
+
+        if (status == MqttConnectionStatus.DISCONNECTED || status == MqttConnectionStatus.NONE || status == MqttConnectionStatus.ERROR) {
+            SFMqttWrapper.connect(serverHost, serverPort, userName);
+        } else {
+            SFMqttWrapper.disconnect();
+            SFMqttWrapper.connect(serverHost, serverPort, userName);
+        }
+
+    }
+
+
+    /**
+     * 현재 클라이언트의 MQTT Broker 연결 상태를 조회한다.
+     * @return
+     */
+    private MqttConnectionStatus getClientStatus() {
+        return mMqttClientStatus;
     }
 
     /**
@@ -209,9 +283,9 @@ public class MqttWrapper implements IMqttActionListener, MqttCallback, MqttCallb
         @Override
         public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
             if (exception != null) {
-                logger.error("[Publish] onFailure: " + exception.toString());
+                logger.info("[Publish] onFailure: " + exception.toString());
             } else {
-                logger.error("[Publish] onFailure");
+                logger.info("[Publish] onFailure");
             }
         }
     };
@@ -219,18 +293,24 @@ public class MqttWrapper implements IMqttActionListener, MqttCallback, MqttCallb
     /**
      * subscribe Action 을 위한 IMqttActionLisener
      */
-//    IMqttActionListener subscribeMqttActionListener = new IMqttActionListener() {
-//        @Override
-//        public void onSuccess(IMqttToken asyncActionToken) {
-//            logger.info("[Subscribe] onSuccess ");
-//        }
-//
-//        @Override
-//        public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-//            logger.error("[Subscribe] onFailure: " + exception.toString());
-//        }
-//    };
+    IMqttActionListener subscribeMqttActionListener = new IMqttActionListener() {
+        @Override
+        public void onSuccess(IMqttToken asyncActionToken) {
+            logger.info("[Subscribe] onSuccess ");
+        }
 
+        @Override
+        public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+            logger.info("[Subscribe] onFailure: " + exception.toString());
+        }
+    };
+
+    /**
+     * 전달된 파라미터 정보로 MQTT Broker 에 접속한다.
+     * @param host
+     * @param port
+     * @param username
+     */
     private void connect(String host, String port, String username) {
 
         clientId = "TRE" + System.currentTimeMillis();
@@ -273,13 +353,18 @@ public class MqttWrapper implements IMqttActionListener, MqttCallback, MqttCallb
         }
     }
 
-    private void subscribeTopic(String topic, int qos) {
-        if (mqttClient != null &&
-                mMqttClientStatus == MqttConnectionStatus.CONNECTED && topic != null) {
+    /**
+     * 전달된 파라미터 (Topic, qos)로 MQTT Broker 에 구독한다.
+     * @param topic
+     * @param qos
+     */
+    private void subscribe(String topic, int qos) {
+
+        if (mqttClient != null && mMqttClientStatus == MqttConnectionStatus.CONNECTED && topic != null) {
 
             try {
                 logger.info("MQTT : Subscribe to " + topic + ", QoS:" + qos);
-                mqttClient.subscribe(topic, qos);//, (IMqttMessageListener) subscribeMqttActionListener);
+                mqttClient.subscribe(topic, qos);
 
             } catch (MqttException e) {
                 logger.error("MQTT : Subscribe error");
@@ -287,41 +372,52 @@ public class MqttWrapper implements IMqttActionListener, MqttCallback, MqttCallb
         }
     }
 
-    private void unsubscribeTopic(String topic) {
-        if (mqttClient != null &&
-                mMqttClientStatus == MqttConnectionStatus.CONNECTED && topic != null) {
+    /**
+     * 구독을 해지 한다.
+     * @param topic
+     */
+    private void unsubscribe(String topic) {
+
+        if (mqttClient != null && mMqttClientStatus == MqttConnectionStatus.CONNECTED && topic != null) {
 
             try {
                 logger.info("MQTT : Unsubscribe from " + topic);
                 mqttClient.unsubscribe(topic);
 
             } catch (MqttException e) {
-                logger.error( "MQTT : Unsubscribe error");
+                logger.error("MQTT : Unsubscribe error");
             }
         }
     }
 
+    /**
+     * MQTT Broker 로 publish 한다.
+     * @param pubMessage
+     * @param topic
+     * @param qos
+     */
     private void publish(final JSONObject pubMessage, String topic, int qos) {
 
-//        logger.info("MQTT : mMqttClientStatus=" + mMqttClientStatus);
+        logger.info("MQTT : mMqttClientStatus=" + mMqttClientStatus);
 
         if (mqttClient != null &&
                 mMqttClientStatus == MqttConnectionStatus.CONNECTED && topic != null) {
+
             try {
 
                 MqttMessage message = new MqttMessage();
                 message.setPayload(pubMessage.toString().getBytes());
                 logger.info("[Publish] Message Publishing [" + topic + "] " + message + " qos:" + qos);
-                //mqttClient.publish(topic, message, qos, null);
                 mqttClient.publish(topic, message);
-
             } catch (MqttException e) {
                 logger.error("MQTT : Publish error: " + e.toString());
             }
         }
     }
 
-
+    /**
+     * 현재 Mqtt Connect 연결이 정상 상태인 경우 disconnect 한다.
+     */
     private void disconnect() {
         if (mqttClient != null) {
             try {
@@ -337,6 +433,10 @@ public class MqttWrapper implements IMqttActionListener, MqttCallback, MqttCallb
         }
     }
 
+    /**
+     * 현재시간을 조회한다.
+     * @return
+     */
     private String getCurrentTime() {
         long now = System.currentTimeMillis();
         Date date = new Date(now);
@@ -346,6 +446,11 @@ public class MqttWrapper implements IMqttActionListener, MqttCallback, MqttCallb
         return formatDate;
     }
 
+    /**
+     * IMqttActionListener Interface 구현체
+     * onSuccess(IMqttToken asyncActionToken ) 구현
+     * @param asyncActionToken
+     */
     @Override
     public void onSuccess(IMqttToken asyncActionToken) {
 
@@ -377,11 +482,15 @@ public class MqttWrapper implements IMqttActionListener, MqttCallback, MqttCallb
         }
     }
 
+    /**
+     * IMqttActionListener Interface 구현체
+     * onFailure(IMqttToken asyncActionToken, Throwable exception) 구현
+     * @param asyncActionToken
+     */
     @Override
     public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
 
         logger.info("[Connect] onFailure: " + exception.toString());
-
         if (attempts < MAX_RETRY_COUNT_1) {
             attempts++;
 
@@ -428,6 +537,12 @@ public class MqttWrapper implements IMqttActionListener, MqttCallback, MqttCallb
             mListener.onMqttDisconnected();
         }
     }
+
+    /**
+     * MqttCallback Interface 구현체
+     * onSuccess(IMqttToken asyncActionToken ), messageArrived(String topic, MqttMessage message), deliveryComplete(IMqttDeliveryToken token) 구현
+     * @param cause
+     */
 
     @Override
     public void connectionLost(Throwable cause) {
@@ -485,42 +600,55 @@ public class MqttWrapper implements IMqttActionListener, MqttCallback, MqttCallb
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
 
-        logger.info("topic [" + topic + "] " + message);
-
+        logger.info("[Subcribe] Message Arrived [" + topic + "] " + message);
         try {
             JSONObject receivedMessageObj = new JSONObject(new String(message.getPayload()));
 
             if (receivedMessageObj.length() > 0) {
 
-                String method = receivedMessageObj.getString("method");
+                //성공 시 데모앱으로 전달
+                if (!Strings.isEmpty(receivedMessageObj.getString("method"))) {
 
-                String rpcReqId = topic.replace(RPC_REQUEST_TOPIC, "");
-                if (method.equals(DEVICE_ACTIVATION)) {
-                    RESPONSE_DeviceActivation(CODES.RPC_RESONSE_TOPIC+rpcReqId);
-                } else if (method.equals(FIRMWARE_UPDATE)) {
-                    RESPONSE_FirmwareUpdate(CODES.RPC_RESONSE_TOPIC+rpcReqId);
-                } else if (method.equals(OBD_RESET)) {
-                    RESPONSE_OBDReset(CODES.RPC_RESONSE_TOPIC+rpcReqId);
-                } else if (method.equals(DEVICE_SERIAL_NUMBER_CHECK)) {
-                    RESPONSE_DeviceSerialNumberCheck(CODES.RPC_RESONSE_TOPIC+rpcReqId);
-                } else if (method.equals(CLEAR_DEVICE_DATA)) {
-                    RESPONSE_ClearDeviceData(CODES.RPC_RESONSE_TOPIC+rpcReqId);
-                } else if (method.equals(FIRMWARE_UPDATE_CHUNK)) {
-                    RESPONSE_FirmwareUpdateChunk(CODES.RPC_RESONSE_TOPIC+rpcReqId);
+                    String method = receivedMessageObj.getString("method");
+
+                    String rpcReqId = "";
+
+                    if(!Strings.isEmpty(topic)){
+                        rpcReqId = topic.replace(RPC_REQUEST_TOPIC, "");
+                    }
+
+                    if (method.equals(DEVICE_ACTIVATION_STR)) {
+                        responseDeviceActivation(CODES.RPC_RESONSE_TOPIC+rpcReqId);
+                    } else if (method.equals(FIRMWARE_UPDATE_STR)) {
+                        responseFirmwareUpdate(CODES.RPC_RESONSE_TOPIC+rpcReqId);
+                    } else if (method.equals(OBD_RESET_STR)) {
+                        responseOBDReset(CODES.RPC_RESONSE_TOPIC+rpcReqId);
+                    } else if (method.equals(DEVICE_SERIAL_NUMBER_CHECK_STR)) {
+                        responseDeviceSerialNumberCheck(CODES.RPC_RESONSE_TOPIC+rpcReqId);
+                    } else if (method.equals(CLEAR_DEVICE_DATA_STR)) {
+                        responseClearDeviceData(CODES.RPC_RESONSE_TOPIC+rpcReqId);
+                    } else if (method.equals(FIRMWARE_UPDATE_CHUNK_STR)) {
+                        responseFirmwareUpdateChunk(CODES.RPC_RESONSE_TOPIC+rpcReqId);
+                    }
+
+                    if (mListener != null) {
+                        //mListener.onMqttMessageArrived(topic, message);
+                        mListener.onRPCMessageArrived(CODES.RPC_RESULT_TOPIC+rpcReqId, rpcReqId, method, message);
+                    }
+
                 }
-                if (mListener != null) {
-                    mListener.onRPCMessageArrived(topic, rpcReqId,method, message);
-                }
+
                 message.clearPayload();
             }
+
         } catch (JSONException e) {
-//            logger.info("Unexpected JSON exception in MessageArrived");
+            logger.info("Unexpected JSON exception in MessageArrived");
         }
     }
 
     @Override
     public void deliveryComplete(IMqttDeliveryToken token) {
-//        logger.info("[Publish] Message Delivered");
+        logger.info("[Publish] Message Delivered");
     }
 
     @Override
@@ -531,57 +659,20 @@ public class MqttWrapper implements IMqttActionListener, MqttCallback, MqttCallb
 
         logger.info("[Connect] connect Complete: " + serverURI);
 
-        subscribeLinkId(SUBSCRIBE_TOPIC);
-
-        if (mListener != null) {
-            mListener.onMqttConnected();
-        }
-
     }
 
     /**
-     *
+     * Demo 앱에서 사용하기 위한 I/F 제공
      */
     public interface MqttWrapperListener {
         void onMqttConnected();
 
         void onMqttDisconnected();
 
-        void onRPCMessageArrived(String topic, String request_id,String method, MqttMessage mqttMessage);
-    }
+//        void onMqttMessageArrived(String topic, MqttMessage mqttMessage);
 
+        void onRPCMessageArrived(String topic, String request_id, String method, MqttMessage mqttMessage);
 
-    /**
-     * 지정된 서버 정보로 TRE 플랫폼에 MQTT 프로토콜로 접속한다.
-     * 접속 후 토픽 (rpc/request/+) subscribe
-     *
-     * @param host         서버 호스트 값
-     * @param port         포트 값
-     * @param access_token 접속토큰값
-     * @return N/A
-     */
-    public void TRE_Connect(String host, String port, String access_token) {
-        initialize();
-        subscribeLinkId();
-    }
-
-    /**
-     * 지정된 서버 정보로 TRE 플랫폼에 MQTT 프로토콜로 접속한다.
-     * 접속 후 토픽 (rpc/request/+) subscribe
-     * @return N/A
-     */
-    public void TRE_Connect() {
-        initialize();
-        subscribeLinkId();
-    }
-
-    /**
-     * MQTT Broker 연결 해제
-     *
-     * @return N/A
-     */
-    public void TRE_Disconnect() {
-        disconnect();
     }
 
     /**
@@ -590,47 +681,55 @@ public class MqttWrapper implements IMqttActionListener, MqttCallback, MqttCallb
      * @param @T-RemotEye_ARC_TS 문서 참조
      * @return N/A
      */
-    public void TRE_SendTrip() {
-        Trip trip = new Trip();
-        trip.setDemoData();
-        //logger.info("trip.toString()="+trip.toString());
-        publishTrip(TripType.TRIP, trip.tid, trip.stt, trip.edt, trip.dis, trip.tdis, trip.fc, trip.stlat, trip.stlon, trip.edlat, trip.edlon, trip.ctp, trip.coe, trip.fct, trip.hsts, trip.mesp, trip.idt, trip.btv, trip.gnv, trip.wut, trip.usm, trip.est, trip.fwv, trip.dtvt);
+    public void sendTrip() {
+        Trip obj = new Trip();
+        obj.setDemoData();
+        publish(tripMessage.messagePackage(System.currentTimeMillis(), TripType.TRIP.ordinal(), obj), PUBLISH_TOPIC_TRE, qos);
     }
-
+    public void sendTrip(Trip obj) {
+        publish(tripMessage.messagePackage(System.currentTimeMillis(), TripType.TRIP.ordinal(), obj), PUBLISH_TOPIC_TRE, qos);
+    }
     /**
      * MicroTrip 전송
      *
      * @param @T-RemotEye_ARC_TS 문서 참조
      * @return N/A
      */
-    public void TRE_SendMicroTrip() {
-        MicroTrip microTrip = new MicroTrip();
-        microTrip.setDemoData();
-        publishMicroTrip(TripType.MICRO_TRIP, microTrip.tid, microTrip.fc, microTrip.lat, microTrip.lon, microTrip.lc, microTrip.clt, microTrip.cdit, microTrip.rpm, microTrip.sp, microTrip.em, microTrip.el, microTrip.xyz, microTrip.vv, microTrip.tpos);
+    public void sendMicroTrip() {
+        MicroTrip obj = new MicroTrip();
+        obj.setDemoData();
+        publish(tripMessage.messagePackage(System.currentTimeMillis(), TripType.MICRO_TRIP.ordinal(), obj), PUBLISH_TOPIC_TRE, microTripQos);
     }
-
+    public void sendMicroTrip(MicroTrip obj) {
+        publish(tripMessage.messagePackage(System.currentTimeMillis(), TripType.MICRO_TRIP.ordinal(), obj), PUBLISH_TOPIC_TRE, microTripQos);
+    }
     /**
      * High Frequency Diag-nostic전송
      *
      * @param @T-RemotEye_ARC_TS 문서 참조
      * @return N/A
      */
-    public void TRE_SendHfd() {
-        HFDCapabilityInfomation hci = new HFDCapabilityInfomation();
-        hci.setDemoData();
-        publishHFDCapabilityInfomation(TripType.HFD_CAPABILITY_INFORMATION, hci.cm);
+    public void sendHfd() {
+        HFDCapabilityInfomation obj = new HFDCapabilityInfomation();
+        obj.setDemoData();
+        publish(tripMessage.messagePackage(System.currentTimeMillis(), TripType.HFD_CAPABILITY_INFORMATION.ordinal(), obj), PUBLISH_TOPIC_TELEMETRY, qos);
     }
-
+    public void sendHfd(HFDCapabilityInfomation obj) {
+        publish(tripMessage.messagePackage(System.currentTimeMillis(), TripType.HFD_CAPABILITY_INFORMATION.ordinal(), obj), PUBLISH_TOPIC_TELEMETRY, qos);
+    }
     /**
      * Diagnostic Info 전송
      *
      * @param @T-RemotEye_ARC_TS 문서 참조
      * @return N/A
      */
-    public void TRE_SendDiagInfo() {
-        DiagnosticInfomation di = new DiagnosticInfomation();
-        di.setDemoData();
-        publishDiagnosticInfomation(TripType.DIAGNOSTIC_INFORMATION, di.tid, di.dtcc, di.dtck, di.dtcs);
+    public void sendDiagInfo() {
+        DiagnosticInfomation obj = new DiagnosticInfomation();
+        obj.setDemoData();
+        publish(tripMessage.messagePackage(System.currentTimeMillis(), TripType.DIAGNOSTIC_INFORMATION.ordinal(), obj), PUBLISH_TOPIC_TELEMETRY, qos);
+    }
+    public void sendDiagInfo(DiagnosticInfomation obj) {
+        publish(tripMessage.messagePackage(System.currentTimeMillis(), TripType.DIAGNOSTIC_INFORMATION.ordinal(), obj), PUBLISH_TOPIC_TELEMETRY, qos);
     }
 
     /**
@@ -639,10 +738,13 @@ public class MqttWrapper implements IMqttActionListener, MqttCallback, MqttCallb
      * @param @T-RemotEye_ARC_TS 문서 참조
      * @return N/A
      */
-    public void TRE_SendDrivingCollisionWarning() {
-        DrivingCollisionWarning dcw = new DrivingCollisionWarning();
-        dcw.setDemoData();
-        publishDrivingCollisionWarning(TripType.DRIVING_COLLISION_WARNING, dcw.tid, dcw.dclat, dcw.dclon);
+    public void sendDrivingCollisionWarning() {
+        DrivingCollisionWarning obj = new DrivingCollisionWarning();
+        obj.setDemoData();
+        publish(tripMessage.messagePackage(System.currentTimeMillis(), TripType.DRIVING_COLLISION_WARNING.ordinal(), obj), PUBLISH_TOPIC_TELEMETRY, qos);
+    }
+    public void sendDrivingCollisionWarning(DrivingCollisionWarning obj) {
+        publish(tripMessage.messagePackage(System.currentTimeMillis(), TripType.DRIVING_COLLISION_WARNING.ordinal(), obj), PUBLISH_TOPIC_TELEMETRY, qos);
     }
 
     /**
@@ -651,10 +753,13 @@ public class MqttWrapper implements IMqttActionListener, MqttCallback, MqttCallb
      * @param @T-RemotEye_ARC_TS 문서 참조
      * @return N/A
      */
-    public void TRE_SendParkingCollisionWarning() {
-        ParkingCollisionWarning pcw = new ParkingCollisionWarning();
-        pcw.setDemoData();
-        publishParkingCollisionWarning(TripType.PARKING_COLLISION_WARNING, pcw.pclat, pcw.pclon);
+    public void sendParkingCollisionWarning() {
+        ParkingCollisionWarning obj = new ParkingCollisionWarning();
+        obj.setDemoData();
+        publish(tripMessage.messagePackage(System.currentTimeMillis(), TripType.PARKING_COLLISION_WARNING.ordinal(), obj), PUBLISH_TOPIC_TELEMETRY, qos);
+    }
+    public void sendParkingCollisionWarning(ParkingCollisionWarning obj) {
+        publish(tripMessage.messagePackage(System.currentTimeMillis(), TripType.PARKING_COLLISION_WARNING.ordinal(), obj), PUBLISH_TOPIC_TELEMETRY, qos);
     }
 
     /**
@@ -663,10 +768,13 @@ public class MqttWrapper implements IMqttActionListener, MqttCallback, MqttCallb
      * @param @T-RemotEye_ARC_TS 문서 참조
      * @return N/A
      */
-    public void TRE_SendBatteryWarning() {
-        BatteryWarning bw = new BatteryWarning();
-        bw.setDemoData();
-        publishBatteryWarning(TripType.BATTERY_WARNING, bw.wbv);
+    public void sendBatteryWarning() {
+        BatteryWarning obj = new BatteryWarning();
+        obj.setDemoData();
+        publish(tripMessage.messagePackage(System.currentTimeMillis(), TripType.BATTERY_WARNING.ordinal(), obj), PUBLISH_TOPIC_ATTRIBUTES, qos);
+    }
+    public void sendBatteryWarning(BatteryWarning obj) {
+        publish(tripMessage.messagePackage(System.currentTimeMillis(), TripType.BATTERY_WARNING.ordinal(), obj), PUBLISH_TOPIC_ATTRIBUTES, qos);
     }
 
     /**
@@ -675,10 +783,13 @@ public class MqttWrapper implements IMqttActionListener, MqttCallback, MqttCallb
      * @param @T-RemotEye_ARC_TS 문서 참조
      * @return N/A
      */
-    public void TRE_SendUnpluggedWarning() {
-        UnpluggedWarning uw = new UnpluggedWarning();
-        uw.setDemoData();
-        publishUnpluggedWarning(TripType.UNPLUGGED_WARNING, uw.unpt, uw.pt);
+    public void sendUnpluggedWarning() {
+        UnpluggedWarning obj = new UnpluggedWarning();
+        obj.setDemoData();
+        publish(tripMessage.messagePackage(System.currentTimeMillis(), TripType.UNPLUGGED_WARNING.ordinal(), obj), PUBLISH_TOPIC_ATTRIBUTES, qos);
+    }
+    public void sendUnpluggedWarning(UnpluggedWarning obj) {
+        publish(tripMessage.messagePackage(System.currentTimeMillis(), TripType.UNPLUGGED_WARNING.ordinal(), obj), PUBLISH_TOPIC_ATTRIBUTES, qos);
     }
 
     /**
@@ -687,65 +798,13 @@ public class MqttWrapper implements IMqttActionListener, MqttCallback, MqttCallb
      * @param @T-RemotEye_ARC_TS 문서 참조
      * @return N/A
      */
-    public void TRE_SendTurnOffWarning() {
-        TurnoffWarning tw = new TurnoffWarning();
-        tw.setDemoData();
-        publishTurnoffWarning(TripType.TURNOFF_WARNING, tw.rs);
+    public void sendTurnOffWarning() {
+        TurnoffWarning obj = new TurnoffWarning();
+        obj.setDemoData();
+        publish(tripMessage.messagePackage(System.currentTimeMillis(), TripType.TURNOFF_WARNING.ordinal(), obj), PUBLISH_TOPIC_ATTRIBUTES, qos);
     }
-
-
-    public void publishTrip(TripType eventType, int tid, long stt, long edt, int dis, int tdis, int fc, double stlat, double stlon, double edlat, double edlon, int ctp, double coe, int fct, int hsts, int mesp, int idt, double btv, double gnv, int wut, int usm, int est, String fwv, int dtvt) {
-        // tripMessage need to be redefine
-        Trip obj = new Trip(tid, stt, edt, dis, tdis, fc, stlat, stlon, edlat, edlon, ctp, coe, fct, hsts, mesp, idt, btv, gnv, wut, usm, est, fwv, dtvt);
-        publish(tripMessage.messagePackage(System.currentTimeMillis(), eventType.ordinal(), obj), PUBLISH_TOPIC_TRE, qos);
-    }
-
-    public void publishMicroTrip(TripType eventType, String tid, int fc, double lat, double lon, int lc, long clt, int cdit, int rpm, int sp, int em, int el, String xyz, double vv, int tpos) {
-        // tripMessage need to be redefine
-        MicroTrip obj = new MicroTrip(tid, fc, lat, lon, lc, clt, cdit, rpm, sp, em, el, xyz, vv, tpos);
-        publish(tripMessage.messagePackage(System.currentTimeMillis(), eventType.ordinal(), obj), PUBLISH_TOPIC_TRE, microTripQos);
-    }
-
-    public void publishHFDCapabilityInfomation(TripType eventType, int cm) {
-        // tripMessage need to be redefine
-        HFDCapabilityInfomation obj = new HFDCapabilityInfomation(cm);
-        publish(tripMessage.messagePackage(System.currentTimeMillis(), eventType.ordinal(), obj), PUBLISH_TOPIC_TELEMETRY, qos);
-    }
-
-    public void publishDiagnosticInfomation(TripType eventType, int tid, String dtcc, int dtck, int dtcs) {
-        // tripMessage need to be redefine
-        DiagnosticInfomation obj = new DiagnosticInfomation(tid, dtcc, dtck, dtcs);
-        publish(tripMessage.messagePackage(System.currentTimeMillis(), eventType.ordinal(), obj), PUBLISH_TOPIC_TELEMETRY, qos);
-    }
-
-    public void publishDrivingCollisionWarning(TripType eventType, int tid, double dclat, double dclon) {
-        // tripMessage need to be redefine
-        DrivingCollisionWarning obj = new DrivingCollisionWarning(tid, dclat, dclon);
-        publish(tripMessage.messagePackage(System.currentTimeMillis(), eventType.ordinal(), obj), PUBLISH_TOPIC_TELEMETRY, qos);
-    }
-
-    public void publishParkingCollisionWarning(TripType eventType, double pclat, double pclon) {
-        // tripMessage need to be redefine
-        ParkingCollisionWarning obj = new ParkingCollisionWarning(pclat, pclon);
-        publish(tripMessage.messagePackage(System.currentTimeMillis(), eventType.ordinal(), obj), PUBLISH_TOPIC_TELEMETRY, qos);
-    }
-
-    public void publishBatteryWarning(TripType eventType, int wbv) {
-        // tripMessage need to be redefine
-        BatteryWarning obj = new BatteryWarning(wbv);
-        publish(tripMessage.messagePackage(System.currentTimeMillis(), eventType.ordinal(), obj), PUBLISH_TOPIC_ATTRIBUTES, qos);
-    }
-
-    public void publishUnpluggedWarning(TripType eventType, int unpt, int pt) {
-        // tripMessage need to be redefine
-        UnpluggedWarning obj = new UnpluggedWarning(unpt, pt);
-        publish(tripMessage.messagePackage(System.currentTimeMillis(), eventType.ordinal(), obj), PUBLISH_TOPIC_ATTRIBUTES, qos);
-    }
-
-    public void publishTurnoffWarning(TripType eventType, String rs) {
-        // tripMessage need to be redefine
-        TurnoffWarning obj = new TurnoffWarning(rs);
-        publish(tripMessage.messagePackage(System.currentTimeMillis(), eventType.ordinal(), obj), PUBLISH_TOPIC_ATTRIBUTES, qos);
+    public void sendTurnOffWarning(TurnoffWarning obj) {
+        publish(tripMessage.messagePackage(System.currentTimeMillis(), TripType.TURNOFF_WARNING.ordinal(), obj), PUBLISH_TOPIC_ATTRIBUTES, qos);
     }
 
 
@@ -756,16 +815,10 @@ public class MqttWrapper implements IMqttActionListener, MqttCallback, MqttCallb
      * @param @T-RemotEye_ARC_TS 문서 참조
      * @return N/A
      */
-    public void RESPONSE_DeviceActivation(String topic) {
+    public void responseDeviceActivation(String topic) {
         DeviceActivation da = new DeviceActivation();
         da.setDemoData();
-        publishDeviceActivationResponse(RPCType.DEVICE_ACTIVATION, topic);
-    }
-
-    public void RESULT_DeviceActivation(String topic) {
-        DeviceActivation da = new DeviceActivation();
-        da.setDemoData();
-        resultDeviceActivation(RPCType.DEVICE_ACTIVATION, da.vid, topic);
+        publish(rpcMessageResponse.messagePackage(RPCType.DEVICE_ACTIVATION.ordinal()), topic, qos);
     }
 
     /**
@@ -775,12 +828,8 @@ public class MqttWrapper implements IMqttActionListener, MqttCallback, MqttCallb
      * @param @T-RemotEye_ARC_TS 문서 참조
      * @return N/A
      */
-    public void RESPONSE_FirmwareUpdate(String topic) {
-        publishFirmwareUpdateResponse(RPCType.FIRMWARE_UPDATE, topic);
-    }
-
-    public void RESULT_FirmwareUpdate(String topic) {
-        resultFirmwareUpdate(RPCType.FIRMWARE_UPDATE, topic);
+    public void responseFirmwareUpdate(String topic) {
+        publish(rpcMessageResponse.messagePackage(RPCType.FIRMWARE_UPDATE.ordinal()), topic, qos);
     }
 
     /**
@@ -790,12 +839,8 @@ public class MqttWrapper implements IMqttActionListener, MqttCallback, MqttCallb
      * @param @T-RemotEye_ARC_TS 문서 참조
      * @return N/A
      */
-    public void RESPONSE_OBDReset(String topic) {
-        publishOBDResetResponse(RPCType.ODB_RESET, topic);
-    }
-
-    public void RESULT_OBDReset(String topic) {
-        resultOBDReset(RPCType.ODB_RESET, topic);
+    public void responseOBDReset(String topic) {
+        publish(rpcMessageResponse.messagePackage(RPCType.ODB_RESET.ordinal()), topic, qos);
     }
 
     /**
@@ -805,14 +850,8 @@ public class MqttWrapper implements IMqttActionListener, MqttCallback, MqttCallb
      * @param @T-RemotEye_ARC_TS 문서 참조
      * @return N/A
      */
-    public void RESPONSE_DeviceSerialNumberCheck(String topic) {
-        publishDeviceSerialNumberCheckResponse(RPCType.DEVICE_SERIAL_NUMBER_CHECK, topic);
-    }
-
-    public void RESULT_DeviceSerialNumberCheck(String topic) {
-        DeviceSerialNumberCheck da = new DeviceSerialNumberCheck();
-        da.setDemoData();
-        resultDeviceSerialNumberCheck(RPCType.DEVICE_SERIAL_NUMBER_CHECK, da.sn, topic);
+    public void responseDeviceSerialNumberCheck(String topic) {
+        publish(rpcMessageResponse.messagePackage(RPCType.DEVICE_SERIAL_NUMBER_CHECK.ordinal()), topic, qos);
     }
 
     /**
@@ -822,12 +861,8 @@ public class MqttWrapper implements IMqttActionListener, MqttCallback, MqttCallb
      * @param @T-RemotEye_ARC_TS 문서 참조
      * @return N/A
      */
-    public void RESPONSE_ClearDeviceData(String topic) {
-        publishClearDeviceDataResponse(RPCType.CLEAR_DEVICE_DATA, topic);
-    }
-
-    public void RESULT_ClearDeviceData(String topic) {
-        resultClearDeviceData(RPCType.CLEAR_DEVICE_DATA, topic);
+    public void responseClearDeviceData(String topic) {
+        publish(rpcMessageResponse.messagePackage(RPCType.CLEAR_DEVICE_DATA.ordinal()), topic, qos);
     }
 
     /**
@@ -837,90 +872,63 @@ public class MqttWrapper implements IMqttActionListener, MqttCallback, MqttCallb
      * @param @T-RemotEye_ARC_TS 문서 참조
      * @return N/A
      */
-    public void RESPONSE_FirmwareUpdateChunk(String topic) {
-        publishFirmwareUpdateChunkResponse(RPCType.FIRMWARE_UPDATE_CHUNK, topic);
+    public void responseFirmwareUpdateChunk(String topic) {
+        publish(rpcMessageResponse.messagePackage(RPCType.FIRMWARE_UPDATE_CHUNK.ordinal()), topic, qos);
     }
-
-    public void RESULT_FirmwareUpdateChunk(String topic) {
-        resultFirmwareUpdateChunk(RPCType.FIRMWARE_UPDATE_CHUNK, topic);
-    }
-
-
-    //for RPC response
-    public void publishDeviceActivationResponse(RPCType type, String topic) {
-        publish(rpcMessageResponse.messagePackage(type.ordinal()), topic, qos);
-    }
-
-    public void publishFirmwareUpdateResponse(RPCType type, String topic) {
-        publish(rpcMessageResponse.messagePackage(type.ordinal()), topic, qos);
-    }
-
-    public void publishOBDResetResponse(RPCType type, String topic) {
-        publish(rpcMessageResponse.messagePackage(type.ordinal()), topic, qos);
-    }
-
-    public void publishDeviceSerialNumberCheckResponse(RPCType type, String topic) {
-        publish(rpcMessageResponse.messagePackage(type.ordinal()), topic, qos);
-    }
-
-    public void publishClearDeviceDataResponse(RPCType type, String topic) {
-        publish(rpcMessageResponse.messagePackage(type.ordinal()), topic, qos);
-    }
-
-    public void publishFirmwareUpdateChunkResponse(RPCType type, String topic) {
-        publish(rpcMessageResponse.messagePackage(type.ordinal()), topic, qos);
-    }
-
 
     //for RPC result
+
+    /**
+     * DeviceActivation RPC 요청에 대한 처리 결과를 publish 한다.
+     * @param vid
+     * @param topic
+     */
     public void resultDeviceActivation(String vid, String topic) {
         DeviceActivation obj = new DeviceActivation(vid);
         publish(rpcMessageResult.messagePackage(RPCType.DEVICE_ACTIVATION.ordinal(), obj), topic, qos);
     }
 
-    private void resultDeviceActivation(RPCType type, String vid, String topic) {
-        DeviceActivation obj = new DeviceActivation(vid);
-        publish(rpcMessageResult.messagePackage(type.ordinal(), obj), topic, qos);
-    }
-
+    /**
+     * FrimwareUpdate RPC 요청에 대한 처리 결과를 publish 한다.
+     * @param topic
+     */
     public void resultFirmwareUpdate(String topic) {
         publish(rpcMessageResult.messagePackage(RPCType.FIRMWARE_UPDATE.ordinal(), null), topic, qos);
     }
 
-    private void resultFirmwareUpdate(RPCType type, String topic) {
-        publish(rpcMessageResult.messagePackage(type.ordinal(), null), topic, qos);
-    }
-
+    /**
+     * OBDReset RPC 요청에 대한 처리 결과를 publish 한다.
+     * @param topic
+     */
     public void resultOBDReset(String topic) {
         publish(rpcMessageResult.messagePackage(RPCType.ODB_RESET.ordinal(), null), topic, qos);
     }
-    private void resultOBDReset(RPCType type, String topic) {
-        publish(rpcMessageResult.messagePackage(type.ordinal(), null), topic, qos);
-    }
 
+    /**
+     * DeviceSerialNumberCheck RPC 요청에 대한 처리 결과를 publish 한다.
+     * @param sn
+     * @param topic
+     */
     public void resultDeviceSerialNumberCheck(String sn, String topic) {
         DeviceSerialNumberCheck obj = new DeviceSerialNumberCheck(sn);
         publish(rpcMessageResult.messagePackage(RPCType.DEVICE_SERIAL_NUMBER_CHECK.ordinal(), obj), topic, qos);
     }
 
-    private void resultDeviceSerialNumberCheck(RPCType type, String sn, String topic) {
-        DeviceSerialNumberCheck obj = new DeviceSerialNumberCheck(sn);
-        publish(rpcMessageResult.messagePackage(type.ordinal(), obj), topic, qos);
-    }
-
+    /**
+     * ClearDeviceData RPC 요청에 대한 처리 결과를 publish 한다.
+     * @param topic
+     */
     public void resultClearDeviceData(String topic) {
         publish(rpcMessageResult.messagePackage(RPCType.CLEAR_DEVICE_DATA.ordinal(), null), topic, qos);
     }
 
-    private void resultClearDeviceData(RPCType type, String topic) {
-        publish(rpcMessageResult.messagePackage(type.ordinal(), null), topic, qos);
-    }
-
+    /**
+     * FirmwareUpdateChunk RPC 요청에 대한 처리 결과를 publish 한다.
+     * @param topic
+     */
     public void resultFirmwareUpdateChunk(String topic) {
         publish(rpcMessageResult.messagePackage(RPCType.FIRMWARE_UPDATE_CHUNK.ordinal(), null), topic, qos);
     }
 
-    private void resultFirmwareUpdateChunk(RPCType type, String topic) {
-        publish(rpcMessageResult.messagePackage(type.ordinal(), null), topic, qos);
-    }
+
 }

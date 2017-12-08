@@ -14,12 +14,12 @@ public class CODES {
     public static final int TURNOFF_WARNING = 9;
 
     /*RCP Params Codes*/
-    public static final String DEVICE_ACTIVATION = "activationReq";
-    public static final String FIRMWARE_UPDATE = "fwupdate";
-    public static final String OBD_RESET = "reset";
-    public static final String DEVICE_SERIAL_NUMBER_CHECK = "serial";
-    public static final String CLEAR_DEVICE_DATA = "cleardata";
-    public static final String FIRMWARE_UPDATE_CHUNK = "fwupchunk";
+    public static final String DEVICE_ACTIVATION_STR = "activationReq";
+    public static final String FIRMWARE_UPDATE_STR = "fwupdate";
+    public static final String OBD_RESET_STR = "reset";
+    public static final String DEVICE_SERIAL_NUMBER_CHECK_STR = "serial";
+    public static final String CLEAR_DEVICE_DATA_STR = "cleardata";
+    public static final String FIRMWARE_UPDATE_CHUNK_STR = "fwupchunk";
 
     public static final String[] RPC_REQ_ARRAY = {"activationReq", "fwupdate", "reset", "serial", "cleardata", "fwupchunk"};
 
@@ -46,7 +46,7 @@ public class CODES {
 
 
     //2000 RPC 정상적 수행
-    //2001 RPC 메시지 정상적으로 수신
+    //2000 RPC 메시지 정상적으로 수신
     public static final int SUCCESS_RESULT = 2000;
     public static final int SUCCESS_RESPONSE = 2000;
 
