@@ -56,7 +56,7 @@ T-RemotEye Proxy에 접속, 메시지 전송 등을 위해 `defaultPackage.net`�
 
 ### RPC Result 구현 예시
 
-Response응답은 SDK내에서 처리되며, Result응답은 `MqttWrapperListener` 인터페이스의 `onRPCMessageArrived` 함수에서 수신된 RPC메세지 종류에 따라 구현후 SDK에서 제공하는 Result함수를 호출한다.
+Response응답은 SDK내에서 처리되며, Result응답은 `MqttWrapperListener` 인터페이스의 `onRPCMessageArrived` 함수에서 수신된 RPC메세지 종류에 따라 구현후 SDK에서 제공하는 Result함수를 호출해야 합니다.
 
 ```
 import com.sktelecom.smartfleet.sdk.net.SFMqttWrapper인;
@@ -69,8 +69,8 @@ public class Main {
     private static final Logger logger = Logger.getLogger(Main.class);
 
     public static void main(String[] args) {
-	    SFMqttWrapper mqtt = SFMqttWrapper.getInstance();
-	    // MQTT메세지 응답 리스너
+        SFMqttWrapper mqtt = SFMqttWrapper.getInstance();
+	      // MQTT메세지 응답 리스너를 등록합니다.
         mqtt.setListener(new SFMqttWrapper.MqttWrapperListener() {
             @Override
             public void onMqttConnected() {
@@ -85,36 +85,37 @@ public class Main {
             @Override
             /**
              * RPC 메세지 수신
-             * Response응답은 SDK 에서 자동으로 처리되고 아래 함수내에서 method조건을 구현후 Result 함수를호출하도록한다.
+             * Response응답은 SDK 에서 자동으로 처리되고 아래 함수내에서 method조건을 구현후 Result 함수를호출하도록합니다.
              */
             public void onRPCMessageArrived(String topic, String request_id, String method, MqttMessage mqttMessage) {
                 if (method.equals(DEVICE_ACTIVATION)) {
-                    // 단말이 Activation이 필요한 경우에 Activation Flow에 따라 정상적으로 접속이 되는지 확인
+                    // 단말이 Activation이 필요한 경우에 Activation Flow에 따라 정상적으로 접속이 되는지 확인합니다.
                     mqtt.resultDeviceActivation("00가0000",topic);
                 } else if (method.equals(FIRMWARE_UPDATE)) {
-                    // F/W Update에 대한 원격 요청을 정상적으로 수행하는지 확인
+                    // F/W Update에 대한 원격 요청을 정상적으로 수행하는지 확인합니다.
                     mqtt.resultFirmwareUpdate(topic);
                 } else if (method.equals(OBD_RESET)) {
-                    // 단말 리셋을 정상적으로 수행하는지 확인
+                    // 단말 리셋을 정상적으로 수행하는지 확인합니다.
                     mqtt.resultOBDReset(topic);
                 } else if (method.equals(DEVICE_SERIAL_NUMBER_CHECK)) {
-                    // 단말 시리얼키 검사
+                    // 단말 시리얼키 검사합니다.
                     mqtt.resultDeviceSerialNumberCheck("70d71b00-71c9-11e7-b3e0-e5673983c7b9",topic);
                 } else if (method.equals(CLEAR_DEVICE_DATA)) {
-                    // 단말 데이터초기화
+                    // 단말 데이터초기화합니다.
                     mqtt.resultClearDeviceData(topic);
                 } else if (method.equals(FIRMWARE_UPDATE_CHUNK)) {
-                    // Firmware Update Chunk 이벤트
+                    // Firmware Update Chunk 이벤트 처리응답입니다.
                     mqtt.resultFirmwareUpdateChunk(topic);
                 }
             }
         });
-        // MQTTS서버 연결주소 설정
+        // MQTTS서버 연결주소를 설정합니다. 
         mqtt.setHost("localhost");
+        // MQTTS포토를 입력합니다.
         mqtt.setPort("8443");
-        // 사용자 인증키(20자리)
+        // 사용자 인증키(20자리)를 입력합니다.
         mqtt.setToken("00000000000000000001");
-        // MQTTS서버연결
+        // MQTTS서버와 연결합니다.
         mqtt.initialize();
     }
 }
