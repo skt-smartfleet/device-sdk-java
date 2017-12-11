@@ -2,7 +2,6 @@ package com.sktelecom.smartfleet.sdk.net;
 
 import com.sktelecom.smartfleet.sdk.define.CODES;
 import com.sktelecom.smartfleet.sdk.define.CONFIGS;
-import com.sktelecom.smartfleet.sdk.obj.RPCMessageRequest;
 import com.sktelecom.smartfleet.sdk.obj.RPCMessageResponse;
 import com.sktelecom.smartfleet.sdk.obj.RPCMessageResult;
 import com.sktelecom.smartfleet.sdk.obj.TripMessage;
@@ -89,7 +88,7 @@ public class SFMqttWrapper implements IMqttActionListener, MqttCallback, MqttCal
     public String serverHost = CONFIGS.MQTT_SERVER_HOST;
     public String serverPort = CONFIGS.MQTT_SERVER_PORT;
     public String userName = CONFIGS.MQTT_USER_NAME;
-    public String password = CONFIGS.MQTT_PASSWORD;
+//    public String password = CONFIGS.MQTT_PASSWORD;
 
     final private int qos = CONFIGS.qos;
     final private int microTripQos = CONFIGS.microTripQos;
@@ -170,14 +169,14 @@ public class SFMqttWrapper implements IMqttActionListener, MqttCallback, MqttCal
      * @param serverHost
      * @param serverPort
      * @param userName
-     * @param password
+//     * @param password
      */
-    public void mqttConnect(String serverHost, String serverPort, String userName, String password) {
+    public void mqttConnect(String serverHost, String serverPort, String userName/*, String password*/) {
 
         this.serverHost = serverHost;
         this.serverPort = serverPort;
         this.userName = userName;
-        this.password = password;
+//        this.password = password;
 
         initialize();
 
@@ -816,8 +815,6 @@ public class SFMqttWrapper implements IMqttActionListener, MqttCallback, MqttCal
      * @return N/A
      */
     public void responseDeviceActivation(String topic) {
-        DeviceActivation da = new DeviceActivation();
-        da.setDemoData();
         publish(rpcMessageResponse.messagePackage(RPCType.DEVICE_ACTIVATION.ordinal()), topic, qos);
     }
 

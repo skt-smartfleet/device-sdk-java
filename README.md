@@ -1,6 +1,6 @@
 # Java Source for T-RemotEye
 
-본 코드는 T-RemotEye 기반 안드로이드 코드를 제공합니다.
+본 코드는 T-RemotEye 기반 Java SDK를 제공합니다.
 
 ## Configure
 
@@ -37,7 +37,7 @@ public static final int microTripQos = 0;
 public static final int timeout = 15;
 public static final int keepalive = 60;
 ```
-`$project/sdk/src/main/java/com/sktelecom/smartfleet/sdk/net/MqttWrapper.java`:
+`$project/sdk/src/main/java/com/sktelecom/smartfleet/sdk/net/SFMqttWrapper.java`:
 ```
 conOpt = new MqttConnectOptions();
 conOpt.setCleanSession(true);
@@ -52,14 +52,14 @@ if (username != null && username.length() > 0) {
 
 ## Code Guide
 
-T-RemotEye Proxy에 접속, 메시지 전송 등을 위해 `defaultPackage.net`의 MqttWrapper인 Wrapper Class를 제공합니다.
+T-RemotEye Proxy에 접속, 메시지 전송 등을 위해 `defaultPackage.net`의 SFMqttWrapper인 Wrapper Class를 제공합니다.
 
 ### RPC Result 구현 예시
 
 Response응답은 SDK내에서 처리되며, Result응답은 `MqttWrapperListener` 인터페이스의 `onRPCMessageArrived` 함수에서 수신된 RPC메세지 종류에 따라 구현후 SDK에서 제공하는 Result함수를 호출한다.
 
 ```
-import com.sktelecom.smartfleet.sdk.net.MqttWrapper;
+import com.sktelecom.smartfleet.sdk.net.SFMqttWrapper인;
 import org.apache.log4j.Logger;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
@@ -69,9 +69,9 @@ public class Main {
     private static final Logger logger = Logger.getLogger(Main.class);
 
     public static void main(String[] args) {
-	    MqttWrapper mqtt = MqttWrapper.getInstance();
+	    SFMqttWrapper mqtt = SFMqttWrapper.getInstance();
 	    // MQTT메세지 응답 리스너
-        mqtt.setListener(new MqttWrapper.MqttWrapperListener() {
+        mqtt.setListener(new SFMqttWrapper.MqttWrapperListener() {
             @Override
             public void onMqttConnected() {
                 logger.info("mqtt connected..");
@@ -109,26 +109,38 @@ public class Main {
                 }
             }
         });
-        // MQTT서버 연결주소 설정
+        // MQTTS서버 연결주소 설정
         mqtt.setHost("localhost");
         mqtt.setPort("8443");
         // 사용자 인증키(20자리)
         mqtt.setToken("00000000000000000001");
-        // MQTT서버연결(ssl)
-        mqtt.TRE_Connect();
+        // MQTTS서버연결
+        mqtt.initialize();
     }
 }
 
 ```
 ## API
 
+### Initialize
+
+```
+void com.sktelecom.smartfleet.sdk.net.SFMqttWrapper.initialize()
+```
+
+MQTT Broker 로 접속을 위한 초기화 작업을 진행합니다.
+지정된 정보로 MQTTS 클라이언트를 생성하고 연결을 시도합니다.
+
+* Returns
+  * N/A
+
 ### Connect
 
 ```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.connect(String host, String port, String username)
+void com.sktelecom.smartfleet.sdk.net.SFMqttWrapper.mqttConnect(String host, String port, String username)
 ```
 
-지정된 정보로 MQTTS 클라이언트를 생성하고 연결을 시도합니다. MQTTS 프로토콜을 사용하므로 URL은 `ssl://`로 시작합니다.
+지정된 정보로 MQTTS 클라이언트를 생성하고 연결을 시도합니다.
 
 * Parameters
   * **host** 플랫폼 서버 호스트
@@ -139,7 +151,7 @@ void com.sktelecom.smartfleet.sdk.net.MqttWrapper.connect(String host, String po
 
 
 ```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.onSuccess(IMqttToken asyncActionToken)
+void com.sktelecom.smartfleet.sdk.net.SFMqttWrapper.onSuccess(IMqttToken asyncActionToken)
 ```
 
 연결 성공 시 실행하는 콜백 함수입니다.
@@ -150,7 +162,7 @@ void com.sktelecom.smartfleet.sdk.net.MqttWrapper.onSuccess(IMqttToken asyncActi
   * N/A
 
 ```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.onFailure(IMqttToken asyncActionToken)
+void com.sktelecom.smartfleet.sdk.net.SFMqttWrapper.onFailure(IMqttToken asyncActionToken)
 ```
 
 연결 실패 시 실행하는 콜백 함수입니다.
@@ -165,7 +177,7 @@ void com.sktelecom.smartfleet.sdk.net.MqttWrapper.onFailure(IMqttToken asyncActi
 ### Subscribe
 
 ```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.subscribeTopic(String topic, int qos)
+void com.sktelecom.smartfleet.sdk.net.SFMqttWrapper.subscribeTopic(String topic, int qos)
 ```
 
 연결이 성공한 뒤 토픽을 구독할 때 사용하는 함수입니다.
@@ -177,7 +189,7 @@ void com.sktelecom.smartfleet.sdk.net.MqttWrapper.subscribeTopic(String topic, i
   * N/A
 
 ```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.subscribeMqttActionListener.onSuccess(IMqttToken asyncActionToken)
+void com.sktelecom.smartfleet.sdk.net.SFMqttWrapper.subscribeMqttActionListener.onSuccess(IMqttToken asyncActionToken)
 ```
 
 구독 성공 시 실행하는 콜백 함수입니다
@@ -188,7 +200,7 @@ void com.sktelecom.smartfleet.sdk.net.MqttWrapper.subscribeMqttActionListener.on
   * N/A
 
 ```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.subscribeMqttActionListener.onFailure(IMqttToken asyncActionToken)
+void com.sktelecom.smartfleet.sdk.net.SFMqttWrapper.subscribeMqttActionListener.onFailure(IMqttToken asyncActionToken)
 ```
 
 구독 실패 시 실행하는 콜백 함수입니다
@@ -216,7 +228,7 @@ JSONObject com.sktelecom.smartfleet.sdk.obj.TripMessage.messagePackage(long ts, 
   * **message** JSONObject 형태로 메시지를 발행
 
 ```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.publish(final JSONObject pubMessage, String topic, int qos)
+void com.sktelecom.smartfleet.sdk.net.SFMqttWrapper.publish(final JSONObject pubMessage, String topic, int qos)
 ```
 토픽을 발행할 때 사용하는 함수입니다
 
@@ -239,7 +251,7 @@ org.eclipse.paho.client.mqttv3.MqttMessage.setPayload(byte[] payload)
   * N/A
 
 ```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.publishMqttActionListener.onSuccess(IMqttToken asyncActionToken)
+void com.sktelecom.smartfleet.sdk.net.SFMqttWrapper.publishMqttActionListener.onSuccess(IMqttToken asyncActionToken)
 ```
 
 발행 성공 시 실행하는 콜백 함수입니다.
@@ -250,7 +262,7 @@ void com.sktelecom.smartfleet.sdk.net.MqttWrapper.publishMqttActionListener.onSu
   * N/A
 
 ```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.publishMqttActionListener.onFailure(IMqttToken asyncActionToken)
+void com.sktelecom.smartfleet.sdk.net.SFMqttWrapper.publishMqttActionListener.onFailure(IMqttToken asyncActionToken)
 ```
 
 발행 실패 시 실행하는 콜백 함수입니다.
@@ -339,7 +351,7 @@ void com.sktelecom.smartfleet.sdk.obj.payload.HFDCapabilityInfomation.HFDCapabil
 임의로 Diagnostic Information 파라미터 값을 세팅합니다.
 
 ```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.publishDiagnosticInfomation(TripType eventType, int tid, String dtcc, int dtck, int dtcs)
+void com.sktelecom.smartfleet.sdk.net.SFMqttWrapper.publishDiagnosticInfomation(TripType eventType, int tid, String dtcc, int dtck, int dtcs)
 ```
 
 Diagnostic Information을 발행하는 함수입니다.
@@ -385,7 +397,7 @@ void com.sktelecom.smartfleet.sdk.obj.payload.DrivingCollisionWarning.DrivingCol
 #### Parking Collision Warning
 
 ```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.publishParkingCollisionWarning(TripType eventType, double pclat, double pclon)
+void com.sktelecom.smartfleet.sdk.net.SFMqttWrapper.publishParkingCollisionWarning(TripType eventType, double pclat, double pclon)
 ```
 
 Parking Collision Warning을 발행하는 함수입니다.
@@ -454,7 +466,7 @@ void com.sktelecom.smartfleet.sdk.obj.payload.TurnoffWarning.TurnoffWarning(Stri
 ##### Common
 
 ```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.messageArrived(String topic, MqttMessage message)
+void com.sktelecom.smartfleet.sdk.net.SFMqttWrapper.messageArrived(String topic, MqttMessage message)
 ```
 
 구독한 토픽으로 메세지를 받을 시 실행하는 콜백 함수입니다. RPC 요청은 해당 함수를 통해 처리합니다.
@@ -492,7 +504,7 @@ Device RPC Result 토픽을 발행할 때 사용하는 함수입니다.
 ##### Device Activation
 
 ```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.RESPONSE_DeviceActivation(String topic)
+void com.sktelecom.smartfleet.sdk.net.SFMqttWrapper.responseDeviceActivation(String topic)
 ```
 
 Device Activation 이벤트에 대해 Response 토픽 메시지를 보내는 함수 입니다.
@@ -503,31 +515,7 @@ Device Activation 이벤트에 대해 Response 토픽 메시지를 보내는 함
   * N/A
 
 ```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.publishDeviceActivationResponse(RPCType type, String topic)
-```
-
-Device Activation 이벤트에 대해 Response를 발행하는 함수입니다.
-
-* Parameters
-  * **type** RPC 이벤트 타입
-  * **topic** 발행할 토픽
-* Retruns
-  * N/A
-
-```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.resultDeviceActivation(String topic)
-```
-
-Device Activation 이벤트에 대해 Result 토픽 메시지를 보내는 함수 입니다.
-
-* Parameters
-  * **topic** 발행할 토픽
-* Retruns
-  * N/A
-
-
-```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.resultDeviceActivation(String topic)
+void com.sktelecom.smartfleet.sdk.net.SFMqttWrapper.resultDeviceActivation(String vid, String topic)
 ```
 
 Device Activation 이벤트에 대해 Result를 발행하는 함수입니다.
@@ -538,34 +526,11 @@ Device Activation 이벤트에 대해 Result를 발행하는 함수입니다.
 * Retruns
   * N/A
 
-```
-void com.sktelecom.smartfleet.sdk.obj.result.DeviceActivation.DeviceActivation()
-```
-
-Device Activation에 필요한 파라미터를 생성하는 함수입니다.
-
-```
-void com.sktelecom.smartfleet.sdk.obj.result.DeviceActivation.setDemoData()
-```
-
-임의로 Device Activation 파라미터 값을 세팅합니다.
-
-```
-void com.sktelecom.smartfleet.sdk.obj.result.DeviceActivation.DeviceActivation(String vid)
-```
-
-전달 받은 파라미터로 Device Activation 오브젝트를 세팅합니다.
-
-* Parameters
-  * **vid** 차량 식별 번호
-* Returns
-  * N/A
-
 ##### Firmware Update
 
 
 ```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.RESPONSE_FirmwareUpdate(String topic)
+void com.sktelecom.smartfleet.sdk.net.SFMqttWrapper.responseFirmwareUpdate(String topic)
 ```
 
 Firmware Update 이벤트에 대해 Response 토픽 메시지를 보내는 함수 입니다.
@@ -575,32 +540,9 @@ Firmware Update 이벤트에 대해 Response 토픽 메시지를 보내는 함�
 * Retruns
   * N/A
 
-```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.publishFirmwareUpdateResponse(RPCType type, String topic)
-```
-
-Firmware Update 이벤트에 대해 Response를 발행하는 함수입니다.
-
-* Parameters
-  * **type** RPC 이벤트 타입
-  * **topic** 발행할 토픽
-* Retruns
-  * N/A
 
 ```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.resultFirmwareUpdate(String topic)
-```
-
-Firmware Update 이벤트에 대해 Result 토픽 메시지를 보내는 함수 입니다.
-
-* Parameters
-  * **topic** 발행할 토픽
-* Retruns
-  * N/A
-
-
-```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.resultFirmwareUpdate(String topic)
+void com.sktelecom.smartfleet.sdk.net.SFMqttWrapper.resultFirmwareUpdate(String topic)
 ```
 
 Firmware Update 이벤트에 대해 Result를 발행하는 함수입니다.
@@ -613,7 +555,7 @@ Firmware Update 이벤트에 대해 Result를 발행하는 함수입니다.
 ##### OBD Reset
 
 ```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.RESPONSE_OBDReset(String topic)
+void com.sktelecom.smartfleet.sdk.net.SFMqttWrapper.responseOBDReset(String topic)
 ```
 
 OBD Reset 이벤트에 대해 Response 토픽 메시지를 보내는 함수 입니다.
@@ -624,37 +566,12 @@ OBD Reset 이벤트에 대해 Response 토픽 메시지를 보내는 함수 입�
   * N/A
 
 ```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.publishOBDResetResponse(RPCType type, String topic)
-```
-
-OBD Reset 이벤트에 대해 Response를 발행하는 함수입니다.
-
-* Parameters
-  * **type** RPC 이벤트 타입
-  * **topic** 발행할 토픽
-* Retruns
-  * N/A
-
-```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.resultOBDReset(String topic)
-```
-
-OBD Reset 이벤트에 대해 Result 토픽 메시지를 보내는 함수 입니다.
-
-* Parameters
-  * **topic** 발행할 토픽
-* Retruns
-  * N/A
-
-
-```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.resultOBDReset(String topic)
+void com.sktelecom.smartfleet.sdk.net.SFMqttWrapper.resultOBDReset(String topic)
 ```
 
 OBD Reset 이벤트에 대해 Result를 발행하는 함수입니다.
 
 * Parameters
-  * **type** RPC 이벤트 타입
   * **topic** 발행할 토픽
 * Retruns
   * N/A
@@ -662,7 +579,7 @@ OBD Reset 이벤트에 대해 Result를 발행하는 함수입니다.
 ##### Device Serial NumberCheck
 
 ```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.RESPONSE_DeviceSerialNumberCheck(String topic)
+void com.sktelecom.smartfleet.sdk.net.SFMqttWrapper.responseDeviceSerialNumberCheck(String topic)
 ```
 
 Device Serial NumberCheck 이벤트에 대해 Response 토픽 메시지를 보내는 함수 입니다.
@@ -673,31 +590,7 @@ Device Serial NumberCheck 이벤트에 대해 Response 토픽 메시지를 보�
   * N/A
 
 ```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.publishDeviceSerialNumberCheckResponse(RPCType type, String topic)
-```
-
-Device Serial NumberCheck 이벤트에 대해 Response를 발행하는 함수입니다.
-
-* Parameters
-  * **type** RPC 이벤트 타입
-  * **topic** 발행할 토픽
-* Retruns
-  * N/A
-
-```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.resultDeviceSerialNumberCheck(String topic)
-```
-
-Device Serial NumberCheck 이벤트에 대해 Result 토픽 메시지를 보내는 함수 입니다.
-
-* Parameters
-  * **topic** 발행할 토픽
-* Retruns
-  * N/A
-
-
-```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.resultDeviceSerialNumberCheck(String sn, String topic)
+void com.sktelecom.smartfleet.sdk.net.SFMqttWrapper.resultDeviceSerialNumberCheck(String sn, String topic)
 ```
 
 Device Serial NumberCheck 이벤트에 대해 Result를 발행하는 함수입니다.
@@ -708,34 +601,11 @@ Device Serial NumberCheck 이벤트에 대해 Result를 발행하는 함수입�
 * Retruns
   * N/A
 
-```
-void com.sktelecom.smartfleet.sdk.obj.result.DeviceSerialNumberCheck.DeviceSerialNumberCheck()
-```
-
-Device Serial NumberCheck에 필요한 파라미터를 생성하는 함수입니다.
-
-```
-void com.sktelecom.smartfleet.sdk.obj.result.DeviceSerialNumberCheck.setDemoData()
-```
-
-임의로 Device Serial NumberCheck 파라미터 값을 세팅합니다.
-
-```
-void com.sktelecom.smartfleet.sdk.obj.result.DeviceSerialNumberCheck.DeviceSerialNumberCheck(String sn)
-```
-
-전달 받은 파라미터로 Device Serial NumberCheck 오브젝트를 세팅합니다.
-
-* Parameters
-  * **cn** 디바이스 시리얼 넘버
-* Returns
-  * N/A
-
 
 ##### Clear Device Data
 
 ```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.RESPONSE_ClearDeviceData(String topic)
+void com.sktelecom.smartfleet.sdk.net.SFMqttWrapper.responseClearDeviceData(String topic)
 ```
 
 Clear Device Data 이벤트에 대해 Response 토픽 메시지를 보내는 함수 입니다.
@@ -746,31 +616,7 @@ Clear Device Data 이벤트에 대해 Response 토픽 메시지를 보내는 함
   * N/A
 
 ```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.publishClearDeviceDataResponse(RPCType type, String topic)
-```
-
-Clear Device Data 이벤트에 대해 Response를 발행하는 함수입니다.
-
-* Parameters
-  * **type** RPC 이벤트 타입
-  * **topic** 발행할 토픽
-* Retruns
-  * N/A
-
-```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.resultClearDeviceData(String topic)
-```
-
-Clear Device Data 이벤트에 대해 Result 토픽 메시지를 보내는 함수 입니다.
-
-* Parameters
-  * **topic** 발행할 토픽
-* Retruns
-  * N/A
-
-
-```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.resultClearDeviceData(String topic)
+void com.sktelecom.smartfleet.sdk.net.SFMqttWrapper.resultClearDeviceData(String topic)
 ```
 
 Clear Device Data 이벤트에 대해 Result를 발행하는 함수입니다.
@@ -784,7 +630,7 @@ Clear Device Data 이벤트에 대해 Result를 발행하는 함수입니다.
 ##### Firmware Update Chunk
 
 ```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.RESPONSE_OBDReset(String topic)
+void com.sktelecom.smartfleet.sdk.net.SFMqttWrapper.responseFirmwareUpdateChunk(String topic)
 ```
 
 Firmware Update Chunk 이벤트에 대해 Response 토픽 메시지를 보내는 함수 입니다.
@@ -795,36 +641,12 @@ Firmware Update Chunk 이벤트에 대해 Response 토픽 메시지를 보내는
   * N/A
 
 ```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.publishFirmwareUpdateChunkResponse(RPCType type, String topic)
-```
-
-Firmware Update Chunk 이벤트에 대해 Response를 발행하는 함수입니다.
-
-* Parameters
-  * **type** RPC 이벤트 타입
-  * **topic** 발행할 토픽
-* Retruns
-  * N/A
-
-```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.resultFirmwareUpdateChunk(String topic)
-```
-
-Firmware Update Chunk 이벤트에 대해 Result 토픽 메시지를 보내는 함수 입니다.
-
-* Parameters
-  * **topic** 발행할 토픽
-* Retruns
-  * N/A
-
-```
-void com.sktelecom.smartfleet.sdk.net.MqttWrapper.resultFirmwareUpdateChunk(String topic)
+void com.sktelecom.smartfleet.sdk.net.SFMqttWrapper.resultFirmwareUpdateChunk(String topic)
 ```
 
 Firmware Update Chunk 이벤트에 대해 Result를 발행하는 함수입니다.
 
 * Parameters
-  * **type** RPC 이벤트 타입
   * **topic** 발행할 토픽
 * Retruns
   * N/A
