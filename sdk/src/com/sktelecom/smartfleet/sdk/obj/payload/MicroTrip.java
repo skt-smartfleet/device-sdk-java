@@ -2,7 +2,7 @@ package com.sktelecom.smartfleet.sdk.obj.payload;
 
 public class MicroTrip {
 
-    public String tid;
+    public int tid;
     public int fc;
     public double lat;
     public double lon;
@@ -21,7 +21,7 @@ public class MicroTrip {
 
     }
 
-    public MicroTrip(String tid, int fc, double lat, double lon, int lc, long clt, int cdit, int rpm, int sp, int em, int el, String xyz, double vv, int tpos) {
+    public MicroTrip(int tid, int fc, double lat, double lon, int lc, long clt, int cdit, int rpm, int sp, int em, int el, String xyz, double vv, int tpos) {
         this.tid = tid;
         this.fc = fc;
         this.lat = lat;
@@ -39,7 +39,7 @@ public class MicroTrip {
     }
 
     public void setDemoData() {
-        tid = "156";
+        tid = 156;
         fc = 154;
         lat = 37.280646;
         lon = 127.117784;

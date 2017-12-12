@@ -254,9 +254,11 @@ public class SFMqttWrapper implements IMqttActionListener, MqttCallback, MqttCal
 
         if (status == MqttConnectionStatus.DISCONNECTED || status == MqttConnectionStatus.NONE || status == MqttConnectionStatus.ERROR) {
             SFMqttWrapper.connect(serverHost, serverPort, userName);
+            subscribeTopic();
         } else {
             SFMqttWrapper.disconnect();
             SFMqttWrapper.connect(serverHost, serverPort, userName);
+
         }
 
     }
@@ -657,6 +659,8 @@ public class SFMqttWrapper implements IMqttActionListener, MqttCallback, MqttCal
         attempts = 0;
 
         logger.info("[Connect] connect Complete: " + serverURI);
+
+        subscribeTopic();
 
     }
 
