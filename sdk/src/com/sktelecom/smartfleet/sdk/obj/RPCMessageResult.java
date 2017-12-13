@@ -11,12 +11,13 @@ import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
 import static com.sktelecom.smartfleet.sdk.define.CODES.SUCCESS_RESULT;
+import static com.sktelecom.smartfleet.sdk.define.CODES.SUCCESS_RESULTS;
 
 public class RPCMessageResult {
 
     private final Logger logger = Logger.getLogger(RPCMessageResult.class);
-    String rst;
-    String aif;
+//    String rst;
+//    String additionalInfo;
 
     public RPCMessageResult() {
     }
@@ -29,14 +30,14 @@ public class RPCMessageResult {
 
         try {
 
-            message.put("result", SUCCESS_RESULT);
+            message.put("results", SUCCESS_RESULTS);
 
             if (ty == RPCType.DEVICE_ACTIVATION.ordinal()) {
-                message.put("aif", new JSONObject(gson.toJson((DeviceActivation) obj)));
+                message.put("additionalInfo", new JSONObject(gson.toJson((DeviceActivation) obj)));
             } else if (ty == RPCType.FIRMWARE_UPDATE.ordinal()) {
             } else if (ty == RPCType.ODB_RESET.ordinal()) {
             } else if (ty == RPCType.DEVICE_SERIAL_NUMBER_CHECK.ordinal()) {
-                message.put("aif", new JSONObject(gson.toJson((DeviceSerialNumberCheck) obj)));
+                message.put("additionalInfo", new JSONObject(gson.toJson((DeviceSerialNumberCheck) obj)));
             } else if (ty == RPCType.CLEAR_DEVICE_DATA.ordinal()) {
             } else if (ty == RPCType.FIRMWARE_UPDATE_CHUNK.ordinal()) {
 

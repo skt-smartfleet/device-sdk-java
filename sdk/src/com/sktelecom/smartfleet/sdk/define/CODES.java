@@ -47,6 +47,7 @@ public class CODES {
 
     //2000 RPC 정상적 수행
     //2000 RPC 메시지 정상적으로 수신
+    public static final int SUCCESS_RESULTS = 2000;
     public static final int SUCCESS_RESULT = 2000;
     public static final int SUCCESS_RESPONSE = 2000;
 
