@@ -58,7 +58,7 @@ public class Main {
         mqtt.initialize();;
 //        mqtt.sendMicroTrip();
 //        mqtt.sendTrip();
-        mqtt.sendTurnOffWarning();
+//        mqtt.sendTurnOffWarning();
         // MQTT서버연결(ssl)
 
     }
