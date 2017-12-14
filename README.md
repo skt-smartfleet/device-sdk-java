@@ -128,7 +128,7 @@ MQTT Broker로 접속하기 위해 초기화 작업을 진행한다.
 지정된 정보로 MQTTS 클라이언트를 생성하고 연결을 시도한다.
 
 * Parameters
-  * **context**	Context 값
+  * N/A
 * Returns
   * N/A
 
@@ -139,7 +139,6 @@ void com.sktelecom.smartfleet.sdk.net.SFMqttWrapper.mqttConnect(String serverHos
 파라미터로 전달한 서버 정보로 MQTTS 클라이언트를 생성하고 연결을 시도한다.
 
 * Parameters
-  * **context**	Context 값
   * **serverHost** 플랫폼 서버 호스트
   * **serverPort** 플랫폼 서버 포트
   * **username** 디바이스 Credentials ID
