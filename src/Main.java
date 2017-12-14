@@ -3,13 +3,33 @@ import org.apache.log4j.Logger;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import static com.sktelecom.smartfleet.sdk.define.CODES.*;
-
+// zip -d *.jar META-INF/*.RSA META-INF/*.DSA META-INF/*.SF
 public class Main {
     private static final Logger logger = Logger.getLogger(Main.class);
-
+    /*
+        param
+        SFSDK–003 localhost 8333 00000000000000000001
+     */
     public static void main(String[] args) {
+        if (args.length == 4) {
+            String test_id = args[0];
+            String host = args[1];
+            String port = args[2];
+            String key =  args[3];
+            Main.connect(test_id,host,port,key);
+        } else {
+            logger.error("테스트 코드를 입력하세요");
+            System.exit(0);
+        }
+    }
+
+    static void log(String s) {
+        System.out.println(s);
+    }
+
+    static void connect(String test_id,String host, String port, String key) {
         SFMqttWrapper mqtt = SFMqttWrapper.getInstance();
-	    // MQTT메세지 응답 리스너
+        // MQTT메세지 응답 리스너
         mqtt.setListener(new SFMqttWrapper.MqttWrapperListener() {
             @Override
             public void onMqttConnected() {
@@ -51,15 +71,55 @@ public class Main {
             }
         });
         // MQTT서버 연결주소 설정
-        mqtt.setHost("localhost");
-        mqtt.setPort("8883");
+        mqtt.setHost(host);
+        mqtt.setPort(port);
         // 사용자 인증키(20자리)
-        mqtt.setUserName("00000000000000000001");
-        mqtt.initialize();;
-//        mqtt.sendMicroTrip();
-//        mqtt.sendTrip();
-//        mqtt.sendTurnOffWarning();
-        // MQTT서버연결(ssl)
+        mqtt.setUserName(key);
+        mqtt.initialize();
+        switch (test_id) {
+            case "SFSDK–003" : logger.info("단말의 인증프로그램(MQTTS) 접속");
+                System.exit(0);
+                break;
+            case "SFSDK–004" : logger.info("단말의 인증프로그램(MQTTS) 접속 후 Subscription확인");
+                System.exit(0);
+                break;
+            case "SFSDK–005" : logger.info("[RPC] 단말 Activation Flow처리(필요 조건)");
+                break;
+            case "SFSDK–006" : logger.info("[RPC] 단말 Activation Flow처리 (불필요 조건)");
+                break;
+            case "SFSDK–007" : logger.info("Microtrip 전송테스트");
+                break;
+            case "SFSDK–008" : logger.info("Microtrip 전송 실패 테스트");
+                break;
+            case "SFSDK–009" : logger.info("Trip 전송 테스트");
+                break;
+            case "SFSDK–010" : logger.info("Trip 전송 실패 테스트");
+                break;
+            case "SFSDK–011" : logger.info("진단 정보 전송 테스트");
+                break;
+            case "SFSDK–012" : logger.info("진단 정보 전송 실패 테스트");
+                break;
+            case "SFSDK–013" : logger.info("배터리 전압 경고 전송 테스트");
+                break;
+            case "SFSDK–014" : logger.info("배터리 전압 경고 전송 실패 테스트");
+                break;
+            case "SFSDK–015" : logger.info("OBD탈착 이벤트 전송 테스트");
+                break;
+            case "SFSDK–016" : logger.info("OBD탈착 이벤트 전송 실패 테스트");
+                break;
+            case "SFSDK–017" : logger.info("종료 요청 이벤트 전송 테스트");
+                break;
+            case "SFSDK–018" : logger.info("종료 요청 이벤트 전송 실패 테스트");
+                break;
+            case "SFSDK–019" : logger.info("원격요청 테스트");
+                break;
+            case "SFSDK–020" : logger.info("단말기 F/W Update");
+                break;
+            case "SFSDK–021" : logger.info("단말기 리셋 요청 테스트");
+                break;
 
+            default    : logger.info("테스트아이디가 존재하지않습니다.");
+                break;
+        }
     }
 }
