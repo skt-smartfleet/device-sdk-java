@@ -258,7 +258,7 @@ public class SFMqttWrapper implements IMqttActionListener, MqttCallback, MqttCal
         } else {
             SFMqttWrapper.disconnect();
             SFMqttWrapper.connect(serverHost, serverPort, userName);
-
+            subscribeTopic();
         }
 
     }
@@ -674,7 +674,7 @@ public class SFMqttWrapper implements IMqttActionListener, MqttCallback, MqttCal
 
 //        void onMqttMessageArrived(String topic, MqttMessage mqttMessage);
 
-        void onRPCMessageArrived(String topic, String request_id, String method, MqttMessage mqttMessage);
+        void onRPCMessageArrived(String topic, String request_id, String method, MqttMessage mqttMessage) throws InterruptedException;
 
     }
 

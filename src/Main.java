@@ -8,9 +8,9 @@ public class Main {
     private static final Logger logger = Logger.getLogger(Main.class);
     /*
         param
-        SFSDK–003 localhost 8333 00000000000000000001
+        localhost 8333 00000000000000000001 SFSDK–003
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         if (args.length == 4) {
             String test_id = args[0];
             String host = args[1];
@@ -27,7 +27,7 @@ public class Main {
         System.out.println(s);
     }
 
-    static void connect(String test_id,String host, String port, String key) {
+    static void connect(String host, String port, String key,String test_id) throws InterruptedException {
         SFMqttWrapper mqtt = SFMqttWrapper.getInstance();
         // MQTT메세지 응답 리스너
         mqtt.setListener(new SFMqttWrapper.MqttWrapperListener() {
@@ -46,7 +46,7 @@ public class Main {
              * RPC 메세지 수신
              * Response응답은 SDK 에서 자동으로 처리되고 아래 함수내에서 method조건을 구현후 Result 함수를호출하도록한다.
              */
-            public void onRPCMessageArrived(String topic, String request_id, String method, MqttMessage mqttMessage) {
+            public void onRPCMessageArrived(String topic, String request_id, String method, MqttMessage mqttMessage) throws InterruptedException {
                 logger.info("onRPCMessageArrived request_id > "+request_id);
                 logger.info("onRPCMessageArrived method > "+method);
                 if (method.equals(DEVICE_ACTIVATION_STR)) {
@@ -68,6 +68,8 @@ public class Main {
                     // Firmware Update Chunk 이벤트
                     mqtt.resultFirmwareUpdateChunk(topic);
                 }
+                Thread.sleep(1000);
+                System.exit(0);
             }
         });
         // MQTT서버 연결주소 설정
@@ -75,50 +77,75 @@ public class Main {
         mqtt.setPort(port);
         // 사용자 인증키(20자리)
         mqtt.setUserName(key);
-        mqtt.initialize();
+        mqtt.mqttConnect();
         switch (test_id) {
-            case "SFSDK–003" : logger.info("단말의 인증프로그램(MQTTS) 접속");
+            case "SFSDK–003" : logger.info("(" + test_id + ") 단말의 인증프로그램(MQTTS) 접속");
                 System.exit(0);
                 break;
-            case "SFSDK–004" : logger.info("단말의 인증프로그램(MQTTS) 접속 후 Subscription확인");
+            case "SFSDK–004" : logger.info("(" + test_id + ") 단말의 인증프로그램(MQTTS) 접속 후 Subscription확인");
+                Thread.sleep(1000);
                 System.exit(0);
                 break;
-            case "SFSDK–005" : logger.info("[RPC] 단말 Activation Flow처리(필요 조건)");
+            case "SFSDK–005" : logger.info("(" + test_id + ") [RPC] 단말 Activation Flow처리(필요 조건)");
                 break;
-            case "SFSDK–006" : logger.info("[RPC] 단말 Activation Flow처리 (불필요 조건)");
+            case "SFSDK–006" : logger.info("(" + test_id + ") [RPC] 단말 Activation Flow처리 (불필요 조건)");
                 break;
-            case "SFSDK–007" : logger.info("Microtrip 전송테스트");
+            case "SFSDK–007" : logger.info("(" + test_id + ") Microtrip 전송테스트");
+                mqtt.sendMicroTrip();
+                System.exit(0);
                 break;
-            case "SFSDK–008" : logger.info("Microtrip 전송 실패 테스트");
+            case "SFSDK–008" : logger.info("(" + test_id + ") Microtrip 전송 실패 테스트");
+                mqtt.sendTrip();
+                System.exit(0);
                 break;
-            case "SFSDK–009" : logger.info("Trip 전송 테스트");
+            case "SFSDK–009" : logger.info("(" + test_id + ") Trip 전송 테스트");
+                mqtt.sendTrip();
+                System.exit(0);
                 break;
-            case "SFSDK–010" : logger.info("Trip 전송 실패 테스트");
+            case "SFSDK–010" : logger.info("(" + test_id + ") Trip 전송 실패 테스트");
+                mqtt.sendMicroTrip();
+                System.exit(0);
                 break;
-            case "SFSDK–011" : logger.info("진단 정보 전송 테스트");
+            case "SFSDK–011" : logger.info("(" + test_id + ") 진단 정보 전송 테스트");
+                mqtt.sendDiagInfo();
+                System.exit(0);
                 break;
-            case "SFSDK–012" : logger.info("진단 정보 전송 실패 테스트");
+            case "SFSDK–012" : logger.info("(" + test_id + ") 진단 정보 전송 실패 테스트");
+                mqtt.sendTrip();
+                System.exit(0);
                 break;
-            case "SFSDK–013" : logger.info("배터리 전압 경고 전송 테스트");
+            case "SFSDK–013" : logger.info("(" + test_id + ") 배터리 전압 경고 전송 테스트");
+                mqtt.sendBatteryWarning();
+                System.exit(0);
                 break;
-            case "SFSDK–014" : logger.info("배터리 전압 경고 전송 실패 테스트");
+            case "SFSDK–014" : logger.info("(" + test_id + ") 배터리 전압 경고 전송 실패 테스트");
+                mqtt.sendMicroTrip();
+                System.exit(0);
                 break;
-            case "SFSDK–015" : logger.info("OBD탈착 이벤트 전송 테스트");
+            case "SFSDK–015" : logger.info("(" + test_id + ") OBD탈착 이벤트 전송 테스트");
+                mqtt.sendUnpluggedWarning();
+                System.exit(0);
                 break;
-            case "SFSDK–016" : logger.info("OBD탈착 이벤트 전송 실패 테스트");
+            case "SFSDK–016" : logger.info("(" + test_id + ") OBD탈착 이벤트 전송 실패 테스트");
+                mqtt.sendTrip();
+                System.exit(0);
                 break;
-            case "SFSDK–017" : logger.info("종료 요청 이벤트 전송 테스트");
+            case "SFSDK–017" : logger.info("(" + test_id + ") 종료 요청 이벤트 전송 테스트");
+                mqtt.sendTurnOffWarning();
+                System.exit(0);
                 break;
-            case "SFSDK–018" : logger.info("종료 요청 이벤트 전송 실패 테스트");
+            case "SFSDK–018" : logger.info("(" + test_id + ") 종료 요청 이벤트 전송 실패 테스트");
+                mqtt.sendMicroTrip();
+                System.exit(0);
                 break;
-            case "SFSDK–019" : logger.info("원격요청 테스트");
+            case "SFSDK–019" : logger.info("(" + test_id + ") [RPC] 원격요청 테스트");
                 break;
-            case "SFSDK–020" : logger.info("단말기 F/W Update");
+            case "SFSDK–020" : logger.info("(" + test_id + ") [RPC] 단말기 F/W Update");
                 break;
-            case "SFSDK–021" : logger.info("단말기 리셋 요청 테스트");
+            case "SFSDK–021" : logger.info("(" + test_id + ") [RPC] 단말기 리셋 요청 테스트");
                 break;
-
-            default    : logger.info("테스트아이디가 존재하지않습니다.");
+            default    : logger.error("(" + test_id + ") 테스트아이디가 존재하지않습니다.");
+                System.exit(0);
                 break;
         }
     }
