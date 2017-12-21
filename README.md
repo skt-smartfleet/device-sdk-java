@@ -1,6 +1,6 @@
-# Java Source for T-RemotEye
+# Java Source for Smart[Fleet]
 
-본 코드는 T-RemotEye 기반 Java SDK를 제공합니다.
+본 코드는 SKT의 Smart[Fleet] 플랫폼 기반 Java SDK를 제공합니다.
 
 ## 1. Configure
 
@@ -52,7 +52,7 @@ if (username != null && username.length() > 0) {
 
 ## 2. Code Guide
 
-T-RemotEye Proxy에 접속, 메시지 전송 등을 위해 MQTT 프로토콜 Wrapper Class를 제공한다.
+Smart[Fleet] Proxy에 접속, 메시지 전송 등을 위해 MQTT 프로토콜 Wrapper Class를 제공한다.
 
 ### 2.1 RPC Result 구현 예시
 ```
